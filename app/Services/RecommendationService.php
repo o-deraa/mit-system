@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Booking;
-use App\Models\KelompokWarga;
 use App\Models\Maba;
 use App\Models\MabaKelompokHistory;
 use App\Models\WeeklyAvailability;
@@ -39,7 +38,7 @@ class RecommendationService
             throw new RuntimeException('Tidak ada minggu aktif.');
         }
 
-        $results = WeeklyAvailability::with('group.representative')
+        $results = WeeklyAvailability::with(['group.representativeMember.warga'])
             ->where('week_id', $week->week_id)
             ->where('is_available', true)
             ->get()
@@ -97,8 +96,8 @@ class RecommendationService
                 return [
                     'kelompok_warga_id' => $groupId,
                     'kode_kelompok' => $availability->group?->kode_kelompok,
-                    'perwakilan' => $availability->group?->representative?->nama,
-                    'wa' => $availability->group?->nomor_wa_perwakilan,
+                    'perwakilan' => $availability->group?->representativeMember?->warga?->nama,
+                    'wa' => $availability->group?->representativeMember?->nomor_wa,
                     'score' => $score,
                     'queue_count' => $queue,
                     'max_queue' => $maxQueue,

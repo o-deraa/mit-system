@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => 'Edit Maba'])
 
 @section('content')
-<h1 class="h3 mb-3">Edit Maba</h1>
+<x-page-header title="Edit Maba" subtitle="Ubah data maba MIT angkatan 2025" />
 
 <div class="card">
     <div class="card-body">

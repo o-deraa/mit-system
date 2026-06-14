@@ -23,7 +23,7 @@ class QueueMonitoringController extends Controller
         $rows = collect();
 
         if ($week) {
-            $rows = WeeklyAvailability::with(['group.representative', 'group.members.warga'])
+            $rows = WeeklyAvailability::with(['group.representativeMember.warga', 'group.members.warga'])
                 ->where('week_id', $week->week_id)
                 ->orderBy('kelompok_warga_id')
                 ->get()

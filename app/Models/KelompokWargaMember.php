@@ -11,6 +11,10 @@ class KelompokWargaMember extends Model
     protected $primaryKey = 'member_id';
     protected $guarded = [];
 
+    protected $casts = [
+        'is_perwakilan' => 'boolean',
+    ];
+
     public function group(): BelongsTo
     {
         return $this->belongsTo(KelompokWarga::class, 'kelompok_warga_id', 'kelompok_warga_id');

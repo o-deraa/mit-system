@@ -1,0 +1,93 @@
+:root {
+    --mit-bg: #f6f8fb;
+    --mit-border: #e5e7eb;
+    --mit-dark: #111827;
+    --mit-muted: #64748b;
+}
+
+body {
+    background: var(--mit-bg);
+}
+
+.page-title {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.card {
+    border: 1px solid var(--mit-border);
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+}
+
+.card-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--mit-border);
+    font-weight: 600;
+}
+
+.table {
+    vertical-align: middle;
+}
+
+.table thead th {
+    background: #f8fafc;
+    color: #334155;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    white-space: nowrap;
+}
+
+.table td {
+    color: #1f2937;
+}
+
+.btn {
+    border-radius: 9px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 10px;
+}
+
+.badge {
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.mit-card-muted {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.mit-empty-state {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--mit-muted);
+}
+
+.mit-empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: .75rem;
+    color: #94a3b8;
+}
+
+.mit-action-group {
+    display: flex;
+    gap: .35rem;
+    flex-wrap: wrap;
+}
+
+.mit-text-small {
+    font-size: .85rem;
+}
+
+pre {
+    background: #f8fafc;
+    padding: .75rem;
+    border-radius: 10px;
+    font-size: .8rem;
+}

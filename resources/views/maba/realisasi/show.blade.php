@@ -7,7 +7,7 @@
     <div class="card-header">Informasi Realisasi</div>
     <div class="card-body">
         <table class="table table-bordered">
-            <tr><th>Status</th><td>{{ $realisasi->status }}</td></tr>
+            <tr><th>Status</th><td><x-realisasi-status :status="$realisasi->status" /></td></tr>
             <tr><th>Booking ID</th><td>{{ $realisasi->booking_id }}</td></tr>
             <tr><th>Kelompok</th><td>Kelompok {{ $realisasi->booking?->group?->kode_kelompok }}</td></tr>
             <tr><th>Submitted At</th><td>{{ $realisasi->submitted_at }}</td></tr>

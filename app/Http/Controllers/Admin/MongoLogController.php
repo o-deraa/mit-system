@@ -22,27 +22,21 @@ class MongoLogController extends Controller
     public function activity(): View
     {
         return view('admin.logs.activity', [
-            'items' => ActivityLog::query()
-                ->orderBy('_id', 'desc')
-                ->simplePaginate(15),
+            'items' => ActivityLog::paginate(15),
         ]);
     }
 
     public function recommendation(): View
     {
         return view('admin.logs.recommendation', [
-            'items' => RecommendationLog::query()
-                ->orderBy('_id', 'desc')
-                ->simplePaginate(15),
+            'items' => RecommendationLog::paginate(15),
         ]);
     }
 
     public function revision(): View
     {
         return view('admin.logs.revision', [
-            'items' => RevisionHistory::query()
-                ->orderBy('_id', 'desc')
-                ->simplePaginate(15),
+            'items' => RevisionHistory::paginate(15),
         ]);
     }
 }

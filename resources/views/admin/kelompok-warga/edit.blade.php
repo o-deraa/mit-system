@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => 'Edit Kelompok Warga'])
 
 @section('content')
-<h1 class="h3 mb-3">Edit Kelompok {{ $group->kode_kelompok }}</h1>
+<h1 class="h3 mb-3">Edit Kelompok Warga</h1>
 
 <div class="card">
     <div class="card-body">
@@ -10,16 +10,9 @@
             @method('PUT')
 
             <div class="mb-3">
-                <label class="form-label">Perwakilan</label>
-                <input type="text" class="form-control"
-                       value="{{ $group->representative?->nama }} | {{ $group->representative?->nrp }} | {{ $group->representative?->angkatan }}"
-                       disabled>
-                <div class="form-text">Perubahan perwakilan tidak dibuat di tahap ini agar relasi anggota tetap aman.</div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nomor WA Perwakilan</label>
-                <input type="text" name="nomor_wa_perwakilan" value="{{ old('nomor_wa_perwakilan', $group->nomor_wa_perwakilan) }}" class="form-control" required>
+                <label class="form-label">Kode Kelompok</label>
+                <input type="number" name="kode_kelompok" class="form-control"
+                       value="{{ old('kode_kelompok', $group->kode_kelompok) }}" required>
             </div>
 
             <div class="mb-3">
@@ -28,14 +21,14 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Status Kelompok</label>
+                <label class="form-label">Status</label>
                 <select name="status" class="form-select" required>
-                    <option value="final" @selected(old('status', $group->status) === 'final')>final</option>
                     <option value="draft" @selected(old('status', $group->status) === 'draft')>draft</option>
+                    <option value="final" @selected(old('status', $group->status) === 'final')>final</option>
                 </select>
             </div>
 
-            <button class="btn btn-dark">Simpan Perubahan</button>
+            <button class="btn btn-dark">Update</button>
             <a href="{{ route('admin.kelompok-warga.show', $group->kelompok_warga_id) }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KelompokWarga;
+use App\Models\KelompokWargaMember;
 use App\Models\Warga;
 use App\Services\Admin\KelompokWargaAdminWebService;
 use Illuminate\Http\RedirectResponse;
@@ -16,7 +17,7 @@ class KelompokWargaManagementController extends Controller
     public function index(): View
     {
         return view('admin.kelompok-warga.index', [
-            'groups' => KelompokWarga::with(['representative', 'members.warga'])
+            'groups' => KelompokWarga::with(['representativeMember.warga', 'members.warga'])
                 ->orderBy('kode_kelompok')
                 ->paginate(10),
         ]);
@@ -24,20 +25,14 @@ class KelompokWargaManagementController extends Controller
 
     public function create(): View
     {
-        return view('admin.kelompok-warga.create', [
-            'floatingWarga' => $this->floatingWarga(),
-        ]);
+        return view('admin.kelompok-warga.create');
     }
 
     public function store(Request $request, KelompokWargaAdminWebService $service): RedirectResponse
     {
         $validated = $request->validate([
-            'warga_id' => ['required', 'integer', 'exists:warga,warga_id'],
-            'nomor_wa_perwakilan' => ['required', 'string', 'max:255'],
+            'kode_kelompok' => ['required', 'integer', 'unique:kelompok_warga,kode_kelompok'],
             'rules' => ['nullable', 'string'],
-            'status' => ['required', 'in:draft,final'],
-            'member_ids' => ['required', 'array', 'min:1', 'max:3'],
-            'member_ids.*' => ['integer', 'exists:warga,warga_id'],
         ]);
 
         try {
@@ -45,31 +40,38 @@ class KelompokWargaManagementController extends Controller
 
             return redirect()
                 ->route('admin.kelompok-warga.show', $group->kelompok_warga_id)
-                ->with('success', 'Kelompok warga berhasil dibentuk.');
+                ->with('success', 'Kelompok warga berhasil dibuat. Silakan tambahkan anggota.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', $e->getMessage());
         }
     }
 
-    public function show(int $kelompokWarga): View
+    public function show(KelompokWarga $kelompokWarga): View
     {
         return view('admin.kelompok-warga.show', [
-            'group' => KelompokWarga::with(['representative', 'members.warga'])->findOrFail($kelompokWarga),
-            'floatingWarga' => $this->floatingWarga(),
+            'group' => $kelompokWarga->load(['members.warga', 'representativeMember.warga']),
+            'availableWarga' => Warga::where('status', 'active')
+                ->whereDoesntHave('membership')
+                ->orderBy('angkatan')
+                ->orderBy('nama')
+                ->get(),
         ]);
     }
 
-    public function edit(int $kelompokWarga): View
+    public function edit(KelompokWarga $kelompokWarga): View
     {
         return view('admin.kelompok-warga.edit', [
-            'group' => KelompokWarga::with(['representative', 'members.warga'])->findOrFail($kelompokWarga),
+            'group' => $kelompokWarga->load(['members.warga', 'representativeMember.warga']),
         ]);
     }
 
-    public function update(Request $request, int $kelompokWarga, KelompokWargaAdminWebService $service): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        KelompokWarga $kelompokWarga,
+        KelompokWargaAdminWebService $service
+    ): RedirectResponse {
         $validated = $request->validate([
-            'nomor_wa_perwakilan' => ['required', 'string', 'max:255'],
+            'kode_kelompok' => ['required', 'integer', 'unique:kelompok_warga,kode_kelompok,' . $kelompokWarga->kelompok_warga_id . ',kelompok_warga_id'],
             'rules' => ['nullable', 'string'],
             'status' => ['required', 'in:draft,final'],
         ]);
@@ -78,58 +80,79 @@ class KelompokWargaManagementController extends Controller
             $service->update($kelompokWarga, $validated);
 
             return redirect()
-                ->route('admin.kelompok-warga.show', $kelompokWarga)
-                ->with('success', 'Data kelompok warga berhasil diubah.');
+                ->route('admin.kelompok-warga.show', $kelompokWarga->kelompok_warga_id)
+                ->with('success', 'Kelompok warga berhasil diperbarui.');
         } catch (Throwable $e) {
             return back()->withInput()->with('error', $e->getMessage());
         }
     }
 
-    public function destroy(int $kelompokWarga, KelompokWargaAdminWebService $service): RedirectResponse
+    public function destroy(KelompokWarga $kelompokWarga): RedirectResponse
     {
-        try {
-            $service->deleteIfSafe($kelompokWarga);
+        $kelompokWarga->delete();
 
-            return redirect()
-                ->route('admin.kelompok-warga.index')
-                ->with('success', 'Kelompok warga berhasil dihapus.');
-        } catch (Throwable $e) {
-            return back()->with('error', $e->getMessage());
-        }
+        return redirect()
+            ->route('admin.kelompok-warga.index')
+            ->with('success', 'Kelompok warga berhasil dihapus.');
     }
 
-    public function addMember(Request $request, int $kelompokWarga, KelompokWargaAdminWebService $service): RedirectResponse
-    {
+    public function addMember(
+        Request $request,
+        KelompokWarga $kelompokWarga,
+        KelompokWargaAdminWebService $service
+    ): RedirectResponse {
         $validated = $request->validate([
             'warga_id' => ['required', 'integer', 'exists:warga,warga_id'],
+            'is_perwakilan' => ['nullable', 'boolean'],
+            'nomor_wa' => ['nullable', 'string', 'max:30'],
         ]);
 
         try {
-            $service->addMember($kelompokWarga, (int) $validated['warga_id']);
+            $service->addMember($kelompokWarga, $validated);
 
-            return back()->with('success', 'Anggota kelompok berhasil ditambahkan.');
+            return back()->with('success', 'Anggota berhasil ditambahkan.');
         } catch (Throwable $e) {
-            return back()->with('error', $e->getMessage());
+            return back()->withInput()->with('error', $e->getMessage());
         }
     }
 
-    public function removeMember(int $kelompokWarga, int $memberId, KelompokWargaAdminWebService $service): RedirectResponse
+    public function removeMember(KelompokWargaMember $member, KelompokWargaAdminWebService $service): RedirectResponse
     {
         try {
-            $service->removeMember($memberId);
+            $service->removeMember($member);
 
-            return back()->with('success', 'Anggota kelompok berhasil dikurangi.');
+            return back()->with('success', 'Anggota berhasil dihapus.');
         } catch (Throwable $e) {
             return back()->with('error', $e->getMessage());
         }
     }
 
-    private function floatingWarga()
+    public function setRepresentative(
+        Request $request,
+        KelompokWargaMember $member,
+        KelompokWargaAdminWebService $service
+    ): RedirectResponse {
+        $validated = $request->validate([
+            'nomor_wa' => ['required', 'string', 'max:30'],
+        ]);
+
+        try {
+            $service->setRepresentative($member, $validated['nomor_wa']);
+
+            return back()->with('success', 'Perwakilan kelompok berhasil diperbarui.');
+        } catch (Throwable $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
+    }
+
+    public function finalize(KelompokWarga $kelompokWarga, KelompokWargaAdminWebService $service): RedirectResponse
     {
-        return Warga::where('status', 'active')
-            ->whereDoesntHave('membership')
-            ->orderBy('angkatan')
-            ->orderBy('nama')
-            ->get();
+        try {
+            $service->finalize($kelompokWarga);
+
+            return back()->with('success', 'Kelompok berhasil difinalisasi.');
+        } catch (Throwable $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

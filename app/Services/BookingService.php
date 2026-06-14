@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Services;
-
+use App\Models\KelompokWargaMember;
 use App\Models\Booking;
 use App\Models\BookingParticipant;
-use App\Models\KelompokWarga;
 use App\Models\Maba;
 use App\Models\MabaKelompokHistory;
 use App\Models\Warga;
@@ -54,10 +53,10 @@ class BookingService
             }
 
             $queueCount = $this->bookingRepository->activeQueueCount($week->week_id, $kelompokWargaId);
-            $maxQueue = $this->maxActiveQueueForAvailability($availability);
+            $maxQueue = (int) $availability->session_count;
 
             if ($queueCount >= $maxQueue) {
-                throw new RuntimeException("Queue aktif kelompok warga sudah penuh: {$queueCount}/{$maxQueue}.");
+                throw new RuntimeException("Queue aktif kelompok sudah penuh ({$queueCount}/{$maxQueue}).");
             }
 
             $booking = Booking::create([
@@ -87,11 +86,7 @@ class BookingService
     {
         return DB::transaction(function () use ($warga, $bookingId, $schedule, $location, $notes) {
             $booking = Booking::lockForUpdate()->findOrFail($bookingId);
-            $group = KelompokWarga::findOrFail($booking->kelompok_warga_id);
-
-            if ($group->warga_id !== $warga->warga_id) {
-                throw new RuntimeException('Hanya perwakilan kelompok yang boleh accept booking.');
-            }
+            $this->ensureRepresentative($booking->kelompok_warga_id, $warga->warga_id);
 
             if ($booking->status !== 'pending') {
                 throw new RuntimeException('Hanya booking pending yang bisa di-accept.');
@@ -122,11 +117,7 @@ class BookingService
     {
         return DB::transaction(function () use ($warga, $bookingId, $reason) {
             $booking = Booking::lockForUpdate()->findOrFail($bookingId);
-            $group = KelompokWarga::findOrFail($booking->kelompok_warga_id);
-
-            if ($group->warga_id !== $warga->warga_id) {
-                throw new RuntimeException('Hanya perwakilan kelompok yang boleh cancel booking.');
-            }
+            $this->ensureRepresentative($booking->kelompok_warga_id, $warga->warga_id);
 
             if (!in_array($booking->status, ['pending', 'accepted'], true)) {
                 throw new RuntimeException('Booking ini tidak bisa dibatalkan.');
@@ -202,11 +193,7 @@ class BookingService
     {
         return DB::transaction(function () use ($warga, $bookingId, $notes) {
             $booking = Booking::lockForUpdate()->findOrFail($bookingId);
-            $group = KelompokWarga::findOrFail($booking->kelompok_warga_id);
-
-            if ($group->warga_id !== $warga->warga_id) {
-                throw new RuntimeException('Hanya perwakilan kelompok yang boleh accept booking.');
-            }
+            $this->ensureRepresentative($booking->kelompok_warga_id, $warga->warga_id);
 
             if ($booking->status !== 'pending') {
                 throw new RuntimeException('Hanya booking pending yang bisa di-accept.');
@@ -295,4 +282,18 @@ class BookingService
             return $participant;
         });
     }
+
+    private function ensureRepresentative(int $kelompokWargaId, int $wargaId): void
+    {
+        $isRepresentative = KelompokWargaMember::where('kelompok_warga_id', $kelompokWargaId)
+            ->where('warga_id', $wargaId)
+            ->where('is_perwakilan', true)
+            ->exists();
+
+        if (!$isRepresentative) {
+            throw new RuntimeException('Hanya perwakilan kelompok yang boleh melakukan aksi ini.');
+        }
+    }
+
+
 }

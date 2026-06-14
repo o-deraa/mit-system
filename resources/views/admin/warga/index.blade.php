@@ -1,10 +1,14 @@
 @extends('layouts.app', ['title' => 'Manajemen Warga'])
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3">Manajemen Warga</h1>
-    <a href="{{ route('admin.warga.create') }}" class="btn btn-dark">Tambah Warga</a>
-</div>
+<x-page-header title="Manajemen Warga" subtitle="Kelola warga angkatan 2022, 2023, dan 2024">
+    <x-slot:actions>
+        <a href="{{ route('admin.warga.create') }}" class="btn btn-primary">
+            <i class="ti ti-plus me-1"></i>
+            Tambah Warga
+        </a>
+    </x-slot:actions>
+</x-page-header>
 
 <form method="GET" class="row g-2 mb-3">
     <div class="col-md-6">

@@ -47,7 +47,7 @@
                     <tr>
                         <td>Kelompok {{ $row['group']?->kode_kelompok }}</td>
                         <td>
-                            {{ $row['group']?->representative?->nama }}<br>
+                            {{ $row['group']?->representativeMember?->warga?->nama }}<br>
                             <small class="text-muted">{{ $row['group']?->representative?->nrp }}</small>
                         </td>
                         <td>{{ $row['availability']->session_mode }} maba/sesi</td>

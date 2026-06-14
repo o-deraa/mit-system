@@ -24,7 +24,7 @@ class VerificationService
 
         return VerificationResult::with([
                 'maba',
-                'realisasi.booking.group.representative',
+                'realisasi.booking.group.representativeMember.warga',
                 'realisasi.booking.week',
             ])
             ->where('week_id', $week->week_id)
@@ -72,7 +72,7 @@ class VerificationService
 
         $query = VerificationResult::with([
                 'maba',
-                'realisasi.booking.group.representative',
+                'realisasi.booking.group.representativeMember.warga',
                 'realisasi.booking.week',
             ])
             ->where('week_id', $week->week_id);
@@ -126,7 +126,7 @@ class VerificationService
     {
         $item = VerificationResult::with([
                 'maba',
-                'realisasi.booking.group.representative',
+                'realisasi.booking.group.representativeMember.warga',
                 'realisasi.booking.week',
             ])
             ->findOrFail($verificationId);
@@ -161,8 +161,8 @@ class VerificationService
             'kelompok' => [
                 'id' => $group?->kelompok_warga_id,
                 'kode_kelompok' => $group?->kode_kelompok,
-                'perwakilan' => $group?->representative?->nama,
-                'wa' => $group?->nomor_wa_perwakilan,
+                'perwakilan' => $group?->representativeMember?->warga?->nama,
+                'wa' => $group?->representativeMember?->nomor_wa,
             ],
             'claimed' => [
                 'ttd_2022' => (int) $item->claimed_ttd_2022,

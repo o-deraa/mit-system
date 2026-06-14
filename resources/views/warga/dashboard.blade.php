@@ -1,4 +1,3 @@
-
 @extends('layouts.app', ['title' => 'Dashboard Warga'])
 
 @section('content')

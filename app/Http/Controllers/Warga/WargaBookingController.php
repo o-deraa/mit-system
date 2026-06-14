@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Warga;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\KelompokWarga;
 use App\Models\Warga;
 use App\Services\BookingService;
 use Illuminate\Http\RedirectResponse;
@@ -14,13 +13,19 @@ use Throwable;
 
 class WargaBookingController extends Controller
 {
+    private function currentWarga(): Warga
+    {
+        return Warga::with('representedGroup')->findOrFail(session('mit_user_id'));
+    }
+
     public function incoming(): View|RedirectResponse
     {
-        $warga = Warga::findOrFail(session('mit_user_id'));
-        $group = KelompokWarga::where('warga_id', $warga->warga_id)->first();
+        $warga = $this->currentWarga();
+        $group = $warga->representedGroup;
 
         if (!$group) {
-            return redirect()->route('warga.dashboard')
+            return redirect()
+                ->route('warga.dashboard')
                 ->with('error', 'Hanya perwakilan kelompok yang bisa melihat booking masuk.');
         }
 
@@ -39,11 +44,16 @@ class WargaBookingController extends Controller
 
     public function show(int $booking): View
     {
-        $warga = Warga::findOrFail(session('mit_user_id'));
+        $warga = $this->currentWarga();
 
         return view('warga.booking.show', [
-            'booking' => Booking::with(['creator', 'participants.maba', 'group.representative', 'week'])
-                ->findOrFail($booking),
+            'booking' => Booking::with([
+                'creator',
+                'participants.maba',
+                'group.representativeMember.warga',
+                'week',
+                'realisasi',
+            ])->findOrFail($booking),
             'warga' => $warga,
         ]);
     }
@@ -55,10 +65,8 @@ class WargaBookingController extends Controller
         ]);
 
         try {
-            $warga = Warga::findOrFail(session('mit_user_id'));
-
             $service->acceptBookingWithoutSchedule(
-                $warga,
+                $this->currentWarga(),
                 $booking,
                 $validated['warga_notes'] ?? null
             );
@@ -76,9 +84,11 @@ class WargaBookingController extends Controller
         ]);
 
         try {
-            $warga = Warga::findOrFail(session('mit_user_id'));
-
-            $service->cancelBooking($warga, $booking, $validated['cancelled_reason']);
+            $service->cancelBooking(
+                $this->currentWarga(),
+                $booking,
+                $validated['cancelled_reason']
+            );
 
             return back()->with('success', 'Booking berhasil dibatalkan.');
         } catch (Throwable $e) {
@@ -88,15 +98,18 @@ class WargaBookingController extends Controller
 
     public function accepted(): View|RedirectResponse
     {
-        $warga = Warga::findOrFail(session('mit_user_id'));
-        $group = KelompokWarga::where('warga_id', $warga->warga_id)->first();
+        $warga = $this->currentWarga();
+        $group = $warga->representedGroup;
 
         if (!$group) {
-            return redirect()->route('warga.dashboard')
+            return redirect()
+                ->route('warga.dashboard')
                 ->with('error', 'Hanya perwakilan kelompok yang bisa melihat jadwal accepted.');
         }
 
         return view('warga.booking.accepted', [
+            'warga' => $warga,
+            'group' => $group,
             'bookings' => Booking::with(['creator', 'participants.maba', 'week'])
                 ->where('kelompok_warga_id', $group->kelompok_warga_id)
                 ->where('status', 'accepted')
@@ -107,15 +120,18 @@ class WargaBookingController extends Controller
 
     public function history(): View|RedirectResponse
     {
-        $warga = Warga::findOrFail(session('mit_user_id'));
-        $group = KelompokWarga::where('warga_id', $warga->warga_id)->first();
+        $warga = $this->currentWarga();
+        $group = $warga->representedGroup;
 
         if (!$group) {
-            return redirect()->route('warga.dashboard')
+            return redirect()
+                ->route('warga.dashboard')
                 ->with('error', 'Hanya perwakilan kelompok yang bisa melihat riwayat booking.');
         }
 
         return view('warga.booking.history', [
+            'warga' => $warga,
+            'group' => $group,
             'bookings' => Booking::with(['creator', 'participants.maba', 'week'])
                 ->where('kelompok_warga_id', $group->kelompok_warga_id)
                 ->whereIn('status', ['cancelled', 'completed'])

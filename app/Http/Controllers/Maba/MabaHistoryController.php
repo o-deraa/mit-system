@@ -16,7 +16,7 @@ class MabaHistoryController extends Controller
         $maba = Maba::findOrFail(session('mit_user_id'));
 
         return view('maba.history.index', [
-            'histories' => MabaKelompokHistory::with(['group.representative', 'week', 'booking'])
+            'histories' => MabaKelompokHistory::with(['group.representativeMember.warga', 'week', 'booking'])
                 ->where('maba_id', $maba->maba_id)
                 ->latest('created_at')
                 ->paginate(10),

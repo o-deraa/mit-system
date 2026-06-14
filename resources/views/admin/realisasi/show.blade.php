@@ -7,7 +7,7 @@
     <div class="card-header">Informasi Realisasi</div>
     <div class="card-body">
         <table class="table table-bordered">
-            <tr><th>Status</th><td>{{ $realisasi->status }}</td></tr>
+            <tr><th>Status</th><td><x-realisasi-status :status="$realisasi->status" /></td></tr>
             <tr><th>Booking ID</th><td>{{ $realisasi->booking_id }}</td></tr>
             <tr><th>Minggu</th><td>Minggu {{ $realisasi->week?->week_number }}</td></tr>
             <tr><th>Kelompok</th><td>Kelompok {{ $realisasi->booking?->group?->kode_kelompok }}</td></tr>
@@ -108,7 +108,7 @@
                 <tr>
                     <td>{{ $item->verification_id }}</td>
                     <td>{{ $item->maba?->nama }} | {{ $item->maba?->nrp }}</td>
-                    <td>{{ $item->status }}</td>
+                    <td><x-verification-status :status="$item->status" /></td>
                     <td>{{ $item->claimed_ttd_2022 }}</td>
                     <td>{{ $item->claimed_ttd_2023 }}</td>
                     <td>{{ $item->claimed_ttd_2024 }}</td>

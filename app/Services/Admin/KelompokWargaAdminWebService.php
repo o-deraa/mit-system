@@ -12,121 +12,146 @@ class KelompokWargaAdminWebService
 {
     public function create(array $data): KelompokWarga
     {
-        return DB::transaction(function () use ($data) {
-            $representativeId = (int) $data['warga_id'];
-            $memberIds = array_map('intval', $data['member_ids'] ?? []);
-
-            $allMemberIds = array_values(array_unique(array_merge([$representativeId], $memberIds)));
-
-            if (count($allMemberIds) < 2) {
-                throw new RuntimeException('Kelompok warga minimal berisi 2 warga termasuk perwakilan.');
-            }
-
-            if (count($allMemberIds) > 4) {
-                throw new RuntimeException('Kelompok warga maksimal berisi 4 warga.');
-            }
-
-            $activeCount = Warga::whereIn('warga_id', $allMemberIds)
-                ->where('status', 'active')
-                ->count();
-
-            if ($activeCount !== count($allMemberIds)) {
-                throw new RuntimeException('Semua anggota kelompok harus warga active.');
-            }
-
-            $alreadyJoined = KelompokWargaMember::whereIn('warga_id', $allMemberIds)->exists();
-
-            if ($alreadyJoined) {
-                throw new RuntimeException('Salah satu warga sudah tergabung dalam kelompok lain.');
-            }
-
-            $nextKode = ((int) KelompokWarga::max('kode_kelompok')) + 1;
-
-            $group = KelompokWarga::create([
-                'kode_kelompok' => $nextKode,
-                'warga_id' => $representativeId,
-                'nomor_wa_perwakilan' => $data['nomor_wa_perwakilan'],
-                'rules' => $data['rules'] ?? null,
-                'status' => $data['status'] ?? 'final',
-            ]);
-
-            foreach ($allMemberIds as $wargaId) {
-                KelompokWargaMember::create([
-                    'kelompok_warga_id' => $group->kelompok_warga_id,
-                    'warga_id' => $wargaId,
-                ]);
-            }
-
-            return $group;
-        });
+        return KelompokWarga::create([
+            'kode_kelompok' => $data['kode_kelompok'],
+            'rules' => $data['rules'] ?? null,
+            'status' => 'draft',
+        ]);
     }
 
-    public function update(int $kelompokWargaId, array $data): KelompokWarga
+    public function update(KelompokWarga $group, array $data): KelompokWarga
     {
-        $group = KelompokWarga::findOrFail($kelompokWargaId);
+        $targetStatus = $data['status'] ?? $group->status;
 
         $group->update([
-            'nomor_wa_perwakilan' => $data['nomor_wa_perwakilan'],
+            'kode_kelompok' => $data['kode_kelompok'],
             'rules' => $data['rules'] ?? null,
-            'status' => $data['status'],
         ]);
 
-        return $group;
+        if ($targetStatus === 'final') {
+            $this->finalize($group->refresh());
+        } else {
+            $group->update(['status' => 'draft']);
+        }
+
+        return $group->refresh();
     }
 
-    public function addMember(int $kelompokWargaId, int $wargaId): void
+    public function addMember(KelompokWarga $group, array $data): KelompokWargaMember
     {
-        DB::transaction(function () use ($kelompokWargaId, $wargaId) {
-            $group = KelompokWarga::with('members')->findOrFail($kelompokWargaId);
+        return DB::transaction(function () use ($group, $data) {
+            $wargaId = (int) $data['warga_id'];
+            $isPerwakilan = (bool) ($data['is_perwakilan'] ?? false);
+            $nomorWa = $data['nomor_wa'] ?? null;
+
             $warga = Warga::findOrFail($wargaId);
 
             if ($warga->status !== 'active') {
-                throw new RuntimeException('Warga harus active.');
+                throw new RuntimeException('Warga inactive tidak bisa dimasukkan ke kelompok.');
             }
 
-            if ($group->members()->count() >= 4) {
-                throw new RuntimeException('Kelompok sudah mencapai maksimal 4 anggota.');
+            $alreadyInAnyGroup = KelompokWargaMember::where('warga_id', $wargaId)->exists();
+
+            if ($alreadyInAnyGroup) {
+                throw new RuntimeException('Warga ini sudah tergabung dalam kelompok lain.');
             }
 
-            if (KelompokWargaMember::where('warga_id', $wargaId)->exists()) {
-                throw new RuntimeException('Warga sudah tergabung dalam kelompok lain.');
+            $memberCount = KelompokWargaMember::where('kelompok_warga_id', $group->kelompok_warga_id)->count();
+
+            if ($memberCount >= 4) {
+                throw new RuntimeException('Maksimal anggota kelompok warga adalah 4.');
             }
 
-            KelompokWargaMember::create([
-                'kelompok_warga_id' => $kelompokWargaId,
+            if ($isPerwakilan) {
+                if (trim((string) $nomorWa) === '') {
+                    throw new RuntimeException('Nomor WA wajib diisi untuk perwakilan.');
+                }
+
+                KelompokWargaMember::where('kelompok_warga_id', $group->kelompok_warga_id)
+                    ->update([
+                        'is_perwakilan' => false,
+                        'nomor_wa' => null,
+                    ]);
+            } else {
+                $nomorWa = null;
+            }
+
+            return KelompokWargaMember::create([
+                'kelompok_warga_id' => $group->kelompok_warga_id,
                 'warga_id' => $wargaId,
+                'is_perwakilan' => $isPerwakilan,
+                'nomor_wa' => $nomorWa,
             ]);
         });
     }
 
-    public function removeMember(int $memberId): void
+    public function removeMember(KelompokWargaMember $member): void
     {
-        DB::transaction(function () use ($memberId) {
-            $member = KelompokWargaMember::with('group')->findOrFail($memberId);
-            $group = $member->group;
+        DB::transaction(function () use ($member) {
+            $groupId = $member->kelompok_warga_id;
 
-            if ((int) $group->warga_id === (int) $member->warga_id) {
-                throw new RuntimeException('Perwakilan kelompok tidak boleh langsung dihapus dari anggota.');
-            }
+            if ($member->is_perwakilan) {
+                $member->delete();
 
-            if ($group->members()->count() <= 2) {
-                throw new RuntimeException('Kelompok warga minimal harus memiliki 2 anggota.');
+                $remainingCount = KelompokWargaMember::where('kelompok_warga_id', $groupId)->count();
+
+                if ($remainingCount > 0) {
+                    throw new RuntimeException('Tidak bisa menghapus perwakilan sebelum menunjuk perwakilan baru.');
+                }
+
+                return;
             }
 
             $member->delete();
         });
     }
 
-    public function deleteIfSafe(int $kelompokWargaId): void
+    public function setRepresentative(KelompokWargaMember $member, string $nomorWa): void
     {
-        $used = DB::table('weekly_availability')->where('kelompok_warga_id', $kelompokWargaId)->exists()
-            || DB::table('booking')->where('kelompok_warga_id', $kelompokWargaId)->exists()
-            || DB::table('maba_kelompok_history')->where('kelompok_warga_id', $kelompokWargaId)->exists();
+        DB::transaction(function () use ($member, $nomorWa) {
+            if (trim($nomorWa) === '') {
+                throw new RuntimeException('Nomor WA wajib diisi untuk perwakilan.');
+            }
 
-        if ($used) {
-            throw new RuntimeException('Kelompok tidak bisa dihapus karena sudah dipakai pada availability/booking/riwayat.');
+            KelompokWargaMember::where('kelompok_warga_id', $member->kelompok_warga_id)
+                ->update([
+                    'is_perwakilan' => false,
+                    'nomor_wa' => null,
+                ]);
+
+            $member->update([
+                'is_perwakilan' => true,
+                'nomor_wa' => $nomorWa,
+            ]);
+        });
+    }
+
+    public function finalize(KelompokWarga $group): void
+    {
+        $memberCount = KelompokWargaMember::where('kelompok_warga_id', $group->kelompok_warga_id)->count();
+
+        if ($memberCount < 2 || $memberCount > 4) {
+            throw new RuntimeException('Kelompok final harus memiliki 2 sampai 4 anggota.');
         }
 
-        KelompokWarga::findOrFail($kelompokWargaId)->delete();
+        $representativeCount = KelompokWargaMember::where('kelompok_warga_id', $group->kelompok_warga_id)
+            ->where('is_perwakilan', true)
+            ->count();
+
+        if ($representativeCount !== 1) {
+            throw new RuntimeException('Kelompok final wajib memiliki tepat 1 perwakilan.');
+        }
+
+        $representative = KelompokWargaMember::where('kelompok_warga_id', $group->kelompok_warga_id)
+            ->where('is_perwakilan', true)
+            ->first();
+
+        if (!$representative || trim((string) $representative->nomor_wa) === '') {
+            throw new RuntimeException('Perwakilan wajib memiliki nomor WA.');
+        }
+
+        $group->update([
+            'status' => 'final',
+        ]);
     }
 }

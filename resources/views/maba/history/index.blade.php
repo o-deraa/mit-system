@@ -24,7 +24,7 @@
                 <tr>
                     <td>{{ $history->history_id }}</td>
                     <td>Kelompok {{ $history->group?->kode_kelompok }}</td>
-                    <td>{{ $history->group?->representative?->nama }}</td>
+                    <td>{{ $history->group?->representativeMember?->warga?->nama }}</td>
                     <td>Minggu {{ $history->week?->week_number }}</td>
                     <td>{{ $history->booking_id }}</td>
                     <td>{{ $history->created_at }}</td>

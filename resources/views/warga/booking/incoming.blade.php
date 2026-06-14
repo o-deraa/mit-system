@@ -22,7 +22,7 @@
                 <tr>
                     <td>{{ $booking->booking_id }}</td>
                     <td>{{ $booking->creator?->nama }} | {{ $booking->creator?->nrp }}</td>
-                    <td>{{ $booking->status }}</td>
+                    <td><x-booking-status :status="$booking->status" /></td>
                     <td>{{ $booking->participants->whereIn('status', ['joined', 'present'])->count() }}</td>
                     <td>{{ $booking->final_schedule ?: '-' }}</td>
                     <td>{{ $booking->final_location ?: '-' }}</td>

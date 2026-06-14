@@ -1,72 +1,102 @@
 @extends('layouts.app', ['title' => 'Dashboard Admin'])
 
 @section('content')
-<h1 class="h3 mb-4">Dashboard Admin</h1>
+<x-page-header title="Dashboard Admin" subtitle="Ringkasan sistem MIT Departemen Teknologi Informasi" />
 
 @if($activeWeek)
     <div class="alert alert-success">
+        <i class="ti ti-calendar-check me-2"></i>
         Minggu MIT aktif: <strong>Minggu {{ $activeWeek->week_number }}</strong>
         — {{ $activeWeek->start_date }} s.d. {{ $activeWeek->end_date }}
     </div>
 @else
     <div class="alert alert-warning">
+        <i class="ti ti-alert-triangle me-2"></i>
         Belum ada minggu MIT yang aktif.
     </div>
 @endif
 
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card">
+<div class="row row-cards mb-4">
+    <div class="col-sm-6 col-lg-4">
+        <div class="card mit-stat-card">
             <div class="card-body">
-                <div class="text-muted">Total Maba</div>
-                <div class="fs-3 fw-bold">{{ $totalMaba }}</div>
+                <div class="d-flex align-items-center">
+                    <span class="mit-stat-icon"><i class="ti ti-user"></i></span>
+                    <div class="ms-3">
+                        <div class="text-muted">Total Maba</div>
+                        <div class="h2 mb-0">{{ $totalMaba }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card">
+    <div class="col-sm-6 col-lg-4">
+        <div class="card mit-stat-card">
             <div class="card-body">
-                <div class="text-muted">Total Warga</div>
-                <div class="fs-3 fw-bold">{{ $totalWarga }}</div>
+                <div class="d-flex align-items-center">
+                    <span class="mit-stat-icon"><i class="ti ti-users"></i></span>
+                    <div class="ms-3">
+                        <div class="text-muted">Total Warga</div>
+                        <div class="h2 mb-0">{{ $totalWarga }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card">
+    <div class="col-sm-6 col-lg-4">
+        <div class="card mit-stat-card">
             <div class="card-body">
-                <div class="text-muted">Total Kelompok Warga</div>
-                <div class="fs-3 fw-bold">{{ $totalKelompok }}</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-muted">Total Minggu MIT</div>
-                <div class="fs-3 fw-bold">{{ $totalWeek }}</div>
+                <div class="d-flex align-items-center">
+                    <span class="mit-stat-icon"><i class="ti ti-users-group"></i></span>
+                    <div class="ms-3">
+                        <div class="text-muted">Kelompok Warga</div>
+                        <div class="h2 mb-0">{{ $totalKelompok }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card">
+    <div class="col-sm-6 col-lg-4">
+        <div class="card mit-stat-card">
             <div class="card-body">
-                <div class="text-muted">Total Booking</div>
-                <div class="fs-3 fw-bold">{{ $totalBooking }}</div>
+                <div class="d-flex align-items-center">
+                    <span class="mit-stat-icon"><i class="ti ti-calendar"></i></span>
+                    <div class="ms-3">
+                        <div class="text-muted">Minggu MIT</div>
+                        <div class="h2 mb-0">{{ $totalWeek }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card">
+    <div class="col-sm-6 col-lg-4">
+        <div class="card mit-stat-card">
             <div class="card-body">
-                <div class="text-muted">Total Realisasi</div>
-                <div class="fs-3 fw-bold">{{ $totalRealisasi }}</div>
+                <div class="d-flex align-items-center">
+                    <span class="mit-stat-icon"><i class="ti ti-clipboard-list"></i></span>
+                    <div class="ms-3">
+                        <div class="text-muted">Booking</div>
+                        <div class="h2 mb-0">{{ $totalBooking }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <div class="card mit-stat-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <span class="mit-stat-icon"><i class="ti ti-report"></i></span>
+                    <div class="ms-3">
+                        <div class="text-muted">Realisasi</div>
+                        <div class="h2 mb-0">{{ $totalRealisasi }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -74,20 +104,21 @@
 
 <div class="card">
     <div class="card-header">
-        Menu Admin
+        <h3 class="card-title">Menu Cepat Admin</h3>
     </div>
-    <div class="card-body">
-        <div class="list-group">
-            <a href="{{ route('admin.maba.index') }}" class="list-group-item list-group-item-action">Manajemen Maba</a>
-            <a href="{{ route('admin.warga.index') }}" class="list-group-item list-group-item-action">Manajemen Warga</a>
-            <a href="{{ route('admin.kelompok-warga.index') }}" class="list-group-item list-group-item-action">Manajemen Kelompok Warga</a>
-            <a href="{{ route('admin.mit-week.index') }}" class="list-group-item list-group-item-action">Manajemen Minggu MIT</a>
-            <a href="{{ route('admin.realisasi.index') }}" class="list-group-item list-group-item-action">Monitor Realisasi</a>
-            <a href="{{ route('admin.verification.index') }}" class="list-group-item list-group-item-action">Verifikasi TTD</a>
-            <a href="{{ route('admin.booking.index') }}" class="list-group-item list-group-item-action">Monitor Booking</a>
-            <a href="{{ route('admin.queue.index') }}" class="list-group-item list-group-item-action">Monitoring Queue Aktif</a>
-            <a href="{{ route('admin.logs.index') }}" class="list-group-item list-group-item-action">Log MongoDB</a>
-        </div>
+    <div class="list-group list-group-flush">
+        <a href="{{ route('admin.maba.index') }}" class="list-group-item list-group-item-action">
+            <i class="ti ti-user me-2"></i> Manajemen Maba
+        </a>
+        <a href="{{ route('admin.warga.index') }}" class="list-group-item list-group-item-action">
+            <i class="ti ti-users me-2"></i> Manajemen Warga
+        </a>
+        <a href="{{ route('admin.booking.index') }}" class="list-group-item list-group-item-action">
+            <i class="ti ti-clipboard-list me-2"></i> Monitor Booking
+        </a>
+        <a href="{{ route('admin.verification.index') }}" class="list-group-item list-group-item-action">
+            <i class="ti ti-checkup-list me-2"></i> Verifikasi TTD
+        </a>
     </div>
 </div>
 @endsection

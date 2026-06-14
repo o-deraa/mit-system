@@ -22,7 +22,7 @@
                 <tr>
                     <td>{{ $booking->booking_id }}</td>
                     <td>Kelompok {{ $booking->group?->kode_kelompok }}</td>
-                    <td>{{ $booking->status }}</td>
+                    <td><x-booking-status :status="$booking->status" /></td>
                     <td>{{ $booking->final_schedule ?: '-' }}</td>
                     <td>{{ $booking->final_location ?: '-' }}</td>
                     <td>{{ $booking->participants->whereIn('status', ['joined', 'present'])->count() }}</td>

@@ -20,7 +20,7 @@ class BookingQueryService
             return [];
         }
 
-        return WeeklyAvailability::with('group.representative')
+        return WeeklyAvailability::with(['group.representativeMember.warga'])
             ->where('week_id', $week->week_id)
             ->where('is_available', true)
             ->get()
@@ -46,8 +46,8 @@ class BookingQueryService
                 return [
                     'kelompok_warga_id' => $groupId,
                     'kode_kelompok' => $availability->group?->kode_kelompok,
-                    'perwakilan' => $availability->group?->representative?->nama,
-                    'wa' => $availability->group?->nomor_wa_perwakilan,
+                    'perwakilan' => $availability->group?->representativeMember?->warga?->nama,
+                    'wa' => $availability->group?->representativeMember?->nomor_wa,
                     'session_mode' => $availability->session_mode,
                     'session_count' => $availability->session_count,
                     'queue_aktif' => $queueCount,
@@ -66,11 +66,12 @@ class BookingQueryService
     public function joinableAcceptedBookingsForMaba(Maba $maba): array
     {
         $week = $this->bookingRepository->activeWeek();
+
         if (!$week) {
             return [];
         }
 
-        return Booking::with('group.representative')
+        return Booking::with(['group.representativeMember.warga'])
             ->where('week_id', $week->week_id)
             ->where('status', 'accepted')
             ->get()
@@ -85,9 +86,11 @@ class BookingQueryService
 
                 $participantCount = $this->bookingRepository->activeParticipantCount($booking->booking_id);
                 $sisaSlot = max(0, $availability->session_mode - $participantCount);
+
                 $hasMet = MabaKelompokHistory::where('maba_id', $maba->maba_id)
                     ->where('kelompok_warga_id', $booking->kelompok_warga_id)
                     ->exists();
+
                 $alreadyJoined = BookingParticipant::where('booking_id', $booking->booking_id)
                     ->where('maba_id', $maba->maba_id)
                     ->whereIn('status', ['joined', 'present'])
@@ -100,7 +103,7 @@ class BookingQueryService
                 return [
                     'booking_id' => $booking->booking_id,
                     'kode_kelompok' => $booking->group?->kode_kelompok,
-                    'perwakilan' => $booking->group?->representative?->nama,
+                    'perwakilan' => $booking->group?->representativeMember?->warga?->nama,
                     'final_schedule' => $booking->final_schedule,
                     'final_location' => $booking->final_location,
                     'peserta' => $participantCount,

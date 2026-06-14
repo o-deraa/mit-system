@@ -55,15 +55,17 @@ Route::prefix('admin')
 
         Route::resource('kelompok-warga', KelompokWargaManagementController::class);
 
-        Route::post(
-            'kelompok-warga/{kelompokWarga}/members',
-            [KelompokWargaManagementController::class, 'addMember']
-        )->name('kelompok-warga.members.store');
+        Route::post('kelompok-warga/{kelompokWarga}/members', [KelompokWargaManagementController::class, 'addMember'])
+            ->name('kelompok-warga.members.store');
 
-        Route::delete(
-            'kelompok-warga/{kelompokWarga}/members/{memberId}',
-            [KelompokWargaManagementController::class, 'removeMember']
-        )->name('kelompok-warga.members.destroy');
+        Route::delete('kelompok-warga/members/{member}', [KelompokWargaManagementController::class, 'removeMember'])
+            ->name('kelompok-warga.members.destroy');
+
+        Route::post('kelompok-warga/members/{member}/representative', [KelompokWargaManagementController::class, 'setRepresentative'])
+            ->name('kelompok-warga.members.representative');
+
+        Route::post('kelompok-warga/{kelompokWarga}/finalize', [KelompokWargaManagementController::class, 'finalize'])
+            ->name('kelompok-warga.finalize');
 
         Route::resource('mit-week', MitWeekManagementController::class)
             ->only(['index', 'create', 'store']);

@@ -24,7 +24,7 @@
                     <td>{{ $item->verification_id }}</td>
                     <td>Minggu {{ $item->week?->week_number }}</td>
                     <td>Kelompok {{ $item->realisasi?->booking?->group?->kode_kelompok }}</td>
-                    <td>{{ $item->status }}</td>
+                    <td><x-verification-status :status="$item->status" /></td>
                     <td>{{ $item->claimed_ttd_2022 + $item->claimed_ttd_2023 + $item->claimed_ttd_2024 }}</td>
                     <td>{{ $item->verified_ttd_2022 + $item->verified_ttd_2023 + $item->verified_ttd_2024 }}</td>
                     <td>{{ $item->admin_comment ?: '-' }}</td>

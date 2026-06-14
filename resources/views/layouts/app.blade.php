@@ -5,60 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'MIT Management System' }}</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- Tabler UI CSS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
+
+    {{-- Tabler Icons --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    {{-- Custom CSS project --}}
+    <link rel="stylesheet" href="{{ asset('css/mit-custom.css') }}">
 </head>
 
-<body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">MIT Management System</a>
+<body>
+<div class="page">
+    @if(session('mit_role'))
+        @include('layouts.partials.sidebar')
+    @endif
 
+    <div class="page-wrapper">
         @if(session('mit_role'))
-            <div class="d-flex align-items-center gap-3">
-                <span class="text-white small">
-                    {{ session('mit_user_name') }} —
-                    {{ strtoupper(session('mit_role')) }}
-                </span>
-
-                <form action="{{ route('mit.logout') }}" method="POST" class="m-0">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-light btn-sm">
-                        Logout
-                    </button>
-                </form>
-            </div>
+            @include('layouts.partials.topbar')
         @endif
+
+        <div class="page-body">
+            <div class="container-xl">
+                @include('layouts.partials.flash')
+
+                @yield('content')
+            </div>
+        </div>
     </div>
-</nav>
-
-<div class="container py-4">
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <strong>Validasi gagal:</strong>
-            <ul class="mb-0">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    @yield('content')
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{{-- Tabler JS --}}
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const forms = document.querySelectorAll('[data-confirm]');
+
+        forms.forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                const message = form.getAttribute('data-confirm') || 'Yakin ingin melanjutkan?';
+
+                if (!confirm(message)) {
+                    event.preventDefault();
+                }
+            });
+        });
+    });
+</script>
 
 @stack('scripts')
 </body>

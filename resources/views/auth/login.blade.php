@@ -43,10 +43,6 @@
                 </form>
             </div>
         </div>
-
-        <div class="alert alert-info mt-3 small">
-            Admin tidak memakai tabel database. Credential admin diambil dari file <code>.env</code>.
-        </div>
     </div>
 </div>
 @endsection

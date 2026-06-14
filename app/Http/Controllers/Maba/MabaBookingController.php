@@ -81,7 +81,7 @@ class MabaBookingController extends Controller
         $maba = $this->currentMaba();
 
         return view('maba.booking.my-bookings', [
-            'bookings' => Booking::with(['group.representative', 'week', 'participants.maba', 'realisasi'])
+            'bookings' => Booking::with(['group.representativeMember.warga', 'week', 'participants.maba', 'realisasi'])
                 ->whereHas('participants', function ($query) use ($maba) {
                     $query->where('maba_id', $maba->maba_id);
                 })
@@ -93,7 +93,7 @@ class MabaBookingController extends Controller
     public function show(int $booking): View
     {
         return view('maba.booking.show', [
-            'booking' => Booking::with(['group.representative', 'group.members.warga', 'week', 'participants.maba'])
+            'booking' => Booking::with(['group.representativeMember.warga', 'group.members.warga', 'week', 'participants.maba'])
                 ->findOrFail($booking),
         ]);
     }
@@ -114,7 +114,7 @@ class MabaBookingController extends Controller
     public function editFinalSchedule(int $booking): View
     {
         return view('maba.booking.final-schedule', [
-            'booking' => Booking::with(['group.representative', 'participants.maba'])->findOrFail($booking),
+            'booking' => Booking::with(['group.representativeMember.warga', 'participants.maba'])->findOrFail($booking),
         ]);
     }
 

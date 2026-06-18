@@ -48,12 +48,12 @@ class DatabaseSeeder extends Seeder
             5 => 'Umar',
             6 => 'Abhista Athallah Dyfan',
             7 => 'Arjunina Maqbulin Usman',
-            8 => 'Rochmatul Auliyah',
+            8 => 'Silfi Rochmatul Auliyah',
             9 => 'Maulana Zaki Putra Zakaria',
             10 => 'Johannes Gilbert Hottonggi Panjaitan',
             11 => 'Revalinda Bunga Nayla Laksono',
             12 => 'Gede Satya Putra Aryanta',
-            13 => 'Putri Agustin',
+            13 => 'Nadya Putri Agustin',
             14 => 'Naurah Sawestri',
             15 => 'Rafsanjani',
             16 => 'Clarissa',
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
             20 => 'Arteya Kumara',
             21 => 'Az Zahra Fiddien Al Farabi',
             22 => 'Muhammad Satrio Utomo',
-            23 => 'Ahza Fakhrullah',
+            23 => 'Barra Ahza Fakhrullah',
             24 => 'Muhammad Rafi Pramudya Putra',
             25 => 'Tafidah Hasna Mumtaza',
             26 => 'Maitasya Rohmatul Ula',
@@ -74,12 +74,12 @@ class DatabaseSeeder extends Seeder
             31 => 'Piramidiana Rachmatika',
             32 => 'Syarifa Dewi',
             33 => 'Daffa Ulhaq Fadhlurrahman',
-            34 => 'Chen',
+            34 => 'Albert Chen',
             35 => 'Chrisna Butarbutar',
             36 => 'Baik Dermawan Ganteng Kece Avv',
             37 => 'Sahira Bilqis Rivadito',
             38 => 'Rifqi As Shidiq',
-            39 => 'La Satta Sitorus',
+            39 => 'Elisabeth La Satta Sitorus',
             40 => 'Sebastian Elroi Hasian Panjaitan',
             41 => 'M. Sabilil Haq',
             42 => 'Nayla Arsha Adyuta',
@@ -90,37 +90,37 @@ class DatabaseSeeder extends Seeder
             47 => 'Putri Permata Sabila',
             48 => 'M. Faris Roisul Azhar',
             49 => 'Ashkhabil Abror Budihardjo',
-            50 => 'Arthur Tamajaya',
-            51 => 'Manudinata',
+            50 => 'Sean Arthur Tamajaya',
+            51 => 'Hendra Manudinata',
             52 => 'Muhammad Syihan Zhafiri',
-            53 => 'Reyhan',
-            54 => 'Sharliz Sigit',
-            55 => 'Dira Anugerah',
-            56 => 'Rahmadina',
+            53 => 'Akbar Reyhan Fabian Susanto',
+            54 => 'Nabila Sharliz Sigit',
+            55 => 'Keisya Dira Anugerah',
+            56 => 'Aliya Rahmadina',
             57 => 'Riezco Eka Bayu Witantra',
             58 => 'Azita Zahwa Zahida Asmoro',
             59 => 'Salsabila Rafa Syafira',
-            60 => 'Danish',
+            60 => 'Husam Danish',
             61 => 'I Ketut Weda Adikusuma',
-            62 => 'Ilham Wahyudi',
+            62 => 'Izat Ilham Wahyudi',
             63 => 'Dewa Ngakan Gede Wira Adhimukti',
             64 => 'I Made Tobby Anantha Adiwijaya',
             65 => 'Muhammad Faturrahman',
-            66 => 'Setyo Ragil',
+            66 => 'Catur Setyo Ragil',
             67 => 'Muhammad Yusuf',
-            68 => 'Halimah Mulia',
-            69 => 'Audya Yuniarini',
-            70 => 'Ahmad Maulana Bahyshidqi',
+            68 => 'Keisya Halimah Mulia',
+            69 => 'Helen Audya Yuniarini',
+            70 => 'Sultan Ahmad Maulana Bahyshidqi',
             71 => 'Muhammad Atallah Mas`udi',
             72 => 'I Made Gyanendra Anand Wisnawa',
             73 => 'Nabilla Nafisatus Zuhro',
             74 => 'Mahrinza Redouane Zakariyah',
-            75 => 'Aisha Hanifa',
+            75 => 'Nayla Aisha Hanifa',
             76 => 'Muhammad Hugo Rayandra Esmid',
-            77 => 'Dwi Muslim',
+            77 => 'Rifki Dwi Muslim',
             78 => 'Najla Tufailah',
             79 => 'Raffa Al Azmi',
-            80 => 'Adi Satrio',
+            80 => 'Reyhan Adi Satrio',
             81 => 'Anargya Shafa Setiyadi Putra',
             82 => 'Fiorellin Ilona',
             83 => 'D`qhaizhar Ari Dhiaulhaq',
@@ -128,15 +128,15 @@ class DatabaseSeeder extends Seeder
             85 => 'Marvelino Davas',
             86 => 'Muhammad Razzan Azizi Djauhari',
             87 => 'Muhammad Rifki Pribadi',
-            88 => 'Alfarezy',
+            88 => 'Wildan Alfarezy',
             89 => 'Nathania Tiara Wahyudi',
             90 => 'Pramudita Adi Putra',
             91 => 'Sulthan Daffa Al Hasyimi',
-            92 => 'James Osamah',
+            92 => 'Naoval James Osamah',
             93 => 'Donnavie Aulia',
             94 => 'Hafiz Anugrah',
             95 => 'Nur Rizki Syahbana',
-            96 => 'Suryapraba Laiasach',
+            96 => 'Afriezal Suryapraba Laiasach',
             97 => 'Muhammad Salman Rifki Haq',
             98 => 'Jude Athala Yazid Sari',
             99 => 'Saktyaveshavatar Dharmesthabuddhi',
@@ -145,31 +145,31 @@ class DatabaseSeeder extends Seeder
             102 => 'Achmad Rifqy Aqila',
             103 => 'Wahyu Yoga Wicaksono',
             104 => 'Khalifa Suryadinarta',
-            105 => 'Artika Satriyo',
-            106 => 'Bagus Harimurti',
-            107 => 'Prayudya Rizky Ramadhani',
-            108 => 'Iqlima Al Fairuz',
+            105 => 'Michiko Artika Satriyo',
+            106 => 'Senna Bagus Harimurti',
+            107 => 'Yovi Prayudya Rizky Ramadhani',
+            108 => 'Nadia Iqlima Al Fairuz',
             109 => 'Syarifah Nailatur Rohma',
             110 => 'Bambang Nasarillah Kurniawan',
-            111 => 'Zid Ilmi',
+            111 => 'Azfaro Zid Ilmi',
             112 => 'A. Algifari Rantiga Isdar',
             113 => 'Muhammad Ridwan',
-            114 => 'Rahma Putri',
-            115 => 'Fairuza',
-            116 => 'Hanna Simanjuntak',
+            114 => 'Azhari Rahma Putri',
+            115 => 'Irsa Fairuza',
+            116 => 'Dian Hanna Simanjuntak',
             117 => 'Muhamad Nasrulhaq',
             118 => 'Pradipta Airlangga Ramadhan',
-            119 => 'Raditya Putra Purbono',
-            120 => 'Patra Yudhistira Edwin',
+            119 => 'Ronin Raditya Putra Purbono',
+            120 => 'Rido Patra Yudhistira Edwin',
             121 => 'Alif Ramzy Pasha Firdaus',
-            122 => 'Anggun Eka Rizqy',
-            123 => 'Syahzanani Al Mustofa',
-            124 => 'Satria Tama',
-            125 => 'Sahya Aryaguna',
-            126 => 'Fadhilah Allayn',
+            122 => 'Naila Anggun Eka Rizqy',
+            123 => 'Aura Syahzanani Al Mustofa',
+            124 => 'Ndaru Satria Tama',
+            125 => 'Boma Sahya Aryaguna',
+            126 => 'Rayhan Fadhilah Allayn',
             127 => 'Razana Aulia',
             128 => 'Atik Putri Matulina',
-            129 => 'Ridho Zhafif',
+            129 => 'Dafa Ridho Zhafif',
         ];
 
         $inactiveMabaNumbers = [10, 99, 52, 86, 109];
@@ -185,6 +185,16 @@ class DatabaseSeeder extends Seeder
                 'status' => in_array($nomorUrut, $inactiveMabaNumbers, true) ? 'inactive' : 'active',
             ]);
         }
+
+        $activeMabas = collect($mabas)
+            ->where('status', 'active')
+            ->values();
+
+        if ($activeMabas->isEmpty()) {
+            throw new \RuntimeException('Seeder gagal: tidak ada maba aktif yang bisa dipakai untuk booking/realisasi.');
+        }
+
+        $activeMabaIds = $activeMabas->pluck('maba_id');
 
         /*
         |--------------------------------------------------------------------------
@@ -531,6 +541,16 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        $activeWargas = collect($wargas)
+            ->where('status', 'active')
+            ->values();
+
+        if ($activeWargas->isEmpty()) {
+            throw new \RuntimeException('Seeder gagal: tidak ada warga aktif yang bisa dipakai untuk kelompok/booking.');
+        }
+
+        $activeWargaIds = $activeWargas->pluck('warga_id');
         /*
         |--------------------------------------------------------------------------
         | 3. MIT WEEK - 20 data
@@ -609,11 +629,16 @@ class DatabaseSeeder extends Seeder
         */
 
         $waBase = 81111111111;
+        $requiredActiveWarga = count($groups) * 3;
+
+        if ($activeWargas->count() < $requiredActiveWarga) {
+            throw new \RuntimeException('Seeder gagal: jumlah warga aktif tidak cukup untuk membentuk semua kelompok warga.');
+        }
 
         foreach ($groups as $groupIndex => $group) {
             for ($memberSlot = 0; $memberSlot < 3; $memberSlot++) {
                 $wargaIndex = ($groupIndex * 3) + $memberSlot;
-                $warga = $wargas[$wargaIndex];
+                $warga = $activeWargas[$wargaIndex];
 
                 KelompokWargaMember::create([
                     'kelompok_warga_id' => $group->kelompok_warga_id,
@@ -670,7 +695,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 80; $i++) {
             $week = $weeks[($i - 1) % 4];
             $group = $groups[($i - 1) % count($groups)];
-            $creator = $mabas[($i - 1) % count($mabas)];
+            $creator = $activeMabas[($i - 1) % $activeMabas->count()];
 
             $status = match (true) {
                 $i <= 20 => 'pending',
@@ -681,6 +706,7 @@ class DatabaseSeeder extends Seeder
 
             $deciderGroupMember = KelompokWargaMember::where('kelompok_warga_id', $group->kelompok_warga_id)
                 ->where('is_perwakilan', true)
+                ->whereIn('warga_id', $activeWargaIds)
                 ->first();
 
             $bookingData = [
@@ -757,7 +783,7 @@ class DatabaseSeeder extends Seeder
             };
 
             for ($slot = 0; $slot < $participantCount; $slot++) {
-                $maba = $mabas[($bookingIndex + $slot) % count($mabas)];
+                $maba = $activeMabas[($bookingIndex + $slot) % $activeMabas->count()];
 
                 $participantStatus = 'joined';
                 $replacedBy = null;
@@ -769,7 +795,7 @@ class DatabaseSeeder extends Seeder
                         $leftAt = now()->subDays(1);
                     } elseif ($slot === $participantCount - 2 && $bookingIndex % 5 === 0) {
                         $participantStatus = 'replaced';
-                        $replacement = $mabas[($bookingIndex + $slot + 10) % count($mabas)];
+                        $replacement = $activeMabas[($bookingIndex + $slot + 10) % $activeMabas->count()];
                         $replacedBy = $replacement->maba_id;
                         $leftAt = now()->subDays(1);
                     }
@@ -814,6 +840,7 @@ class DatabaseSeeder extends Seeder
         foreach ($completedBookings as $index => $booking) {
             $submitterParticipant = BookingParticipant::where('booking_id', $booking->booking_id)
                 ->where('status', 'present')
+                ->whereIn('maba_id', $activeMabaIds)
                 ->first();
 
             if (!$submitterParticipant) {
@@ -851,6 +878,7 @@ class DatabaseSeeder extends Seeder
 
             $presentParticipants = BookingParticipant::where('booking_id', $booking->booking_id)
                 ->where('status', 'present')
+                ->whereIn('maba_id', $activeMabaIds)
                 ->get();
 
             foreach ($presentParticipants as $participantIndex => $participant) {
@@ -913,7 +941,7 @@ class DatabaseSeeder extends Seeder
             RevisionHistory::query()->delete();
 
             for ($i = 1; $i <= 20; $i++) {
-                $actorMaba = $mabas[($i - 1) % count($mabas)];
+                $actorMaba = $activeMabas[($i - 1) % $activeMabas->count()];
                 $realisasi = $realisasis[($i - 1) % count($realisasis)];
 
                 ActivityLog::create([
@@ -954,7 +982,7 @@ class DatabaseSeeder extends Seeder
                     'requested_by_maba_id' => $actorMaba->maba_id,
                     'input_nrp_list' => [
                         $actorMaba->nrp,
-                        $mabas[$i % count($mabas)]->nrp,
+                        $activeMabas[$i % $activeMabas->count()]->nrp,
                     ],
                     'recommended_groups' => [
                         [

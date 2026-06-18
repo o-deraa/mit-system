@@ -159,23 +159,10 @@ return new class extends Migration
             $table->unique(['maba_id', 'kelompok_warga_id']);
         });
 
-        Schema::create('password_reset_request', function (Blueprint $table) {
-            $table->id('reset_id');
-            $table->enum('requester_type', ['maba', 'warga']);
-            $table->unsignedBigInteger('requester_id');
-            $table->string('nrp');
-            $table->string('new_password');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->text('admin_notes')->nullable();
-            $table->timestamp('requested_at')->nullable();
-            $table->timestamp('processed_at')->nullable();
-            $table->string('processed_by_admin_identifier')->nullable();
-        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('password_reset_request');
         Schema::dropIfExists('maba_kelompok_history');
         Schema::dropIfExists('verification_result');
         Schema::dropIfExists('realisasi');

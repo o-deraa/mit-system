@@ -31,79 +31,506 @@ class DatabaseSeeder extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | 1. MABA - 40 data
+        | 1. MABA - 129 data
+        |--------------------------------------------------------------------------
+        | NRP menggunakan format 5027251XXX.
+        | XXX mengikuti nomor urut maba dari 001 sampai 129.
         |--------------------------------------------------------------------------
         */
 
         $mabas = [];
 
         $namaMaba = [
-            'Dera', 'Faqih', 'Hasan', 'Ira', 'Jihan',
-            'Karin', 'Luthfi', 'Mira', 'Naufal', 'Ocha',
-            'Putra', 'Qori', 'Rania', 'Satria', 'Tania',
-            'Umar', 'Vina', 'Wahyu', 'Xavier', 'Yasmin',
-            'Zaki', 'Alif', 'Bella', 'Candra', 'Dinda',
-            'Edo', 'Fara', 'Gilang', 'Hana', 'Ilham',
-            'Joko', 'Kezia', 'Laras', 'Malik', 'Nadia',
-            'Oscar', 'Pram', 'Rizka', 'Seno', 'Tiara',
+            1 => 'Evandra Raditya Fauzan',
+            2 => 'Ferlin Erdina Sari',
+            3 => 'Chilmi Muhammad Ulin Nuha',
+            4 => 'Ni Putu Maqueenta Wijaya',
+            5 => 'Umar',
+            6 => 'Abhista Athallah Dyfan',
+            7 => 'Arjunina Maqbulin Usman',
+            8 => 'Rochmatul Auliyah',
+            9 => 'Maulana Zaki Putra Zakaria',
+            10 => 'Johannes Gilbert Hottonggi Panjaitan',
+            11 => 'Revalinda Bunga Nayla Laksono',
+            12 => 'Gede Satya Putra Aryanta',
+            13 => 'Putri Agustin',
+            14 => 'Naurah Sawestri',
+            15 => 'Rafsanjani',
+            16 => 'Clarissa',
+            17 => 'Rizky Fauzan',
+            18 => 'Nazwa Aulia Dwi Purnomo',
+            19 => 'M. Rama Maulana Wafa',
+            20 => 'Arteya Kumara',
+            21 => 'Az Zahra Fiddien Al Farabi',
+            22 => 'Muhammad Satrio Utomo',
+            23 => 'Ahza Fakhrullah',
+            24 => 'Muhammad Rafi Pramudya Putra',
+            25 => 'Tafidah Hasna Mumtaza',
+            26 => 'Maitasya Rohmatul Ula',
+            27 => 'Rizki Muhammad Fadhli',
+            28 => 'Faeyza Rusmawan',
+            29 => 'Muhammad Rifqi Fathurrahman',
+            30 => 'Muhammad Syadzili Abdul Muhyi',
+            31 => 'Piramidiana Rachmatika',
+            32 => 'Syarifa Dewi',
+            33 => 'Daffa Ulhaq Fadhlurrahman',
+            34 => 'Chen',
+            35 => 'Chrisna Butarbutar',
+            36 => 'Baik Dermawan Ganteng Kece Avv',
+            37 => 'Sahira Bilqis Rivadito',
+            38 => 'Rifqi As Shidiq',
+            39 => 'La Satta Sitorus',
+            40 => 'Sebastian Elroi Hasian Panjaitan',
+            41 => 'M. Sabilil Haq',
+            42 => 'Nayla Arsha Adyuta',
+            43 => 'Asfia Fahmisan',
+            44 => 'Arrumanta Ekna Luhkinasih',
+            45 => 'Ahmad Nayottama Juliansyah',
+            46 => 'Nayarfa Syamahira Dyananta',
+            47 => 'Putri Permata Sabila',
+            48 => 'M. Faris Roisul Azhar',
+            49 => 'Ashkhabil Abror Budihardjo',
+            50 => 'Arthur Tamajaya',
+            51 => 'Manudinata',
+            52 => 'Muhammad Syihan Zhafiri',
+            53 => 'Reyhan',
+            54 => 'Sharliz Sigit',
+            55 => 'Dira Anugerah',
+            56 => 'Rahmadina',
+            57 => 'Riezco Eka Bayu Witantra',
+            58 => 'Azita Zahwa Zahida Asmoro',
+            59 => 'Salsabila Rafa Syafira',
+            60 => 'Danish',
+            61 => 'I Ketut Weda Adikusuma',
+            62 => 'Ilham Wahyudi',
+            63 => 'Dewa Ngakan Gede Wira Adhimukti',
+            64 => 'I Made Tobby Anantha Adiwijaya',
+            65 => 'Muhammad Faturrahman',
+            66 => 'Setyo Ragil',
+            67 => 'Muhammad Yusuf',
+            68 => 'Halimah Mulia',
+            69 => 'Audya Yuniarini',
+            70 => 'Ahmad Maulana Bahyshidqi',
+            71 => 'Muhammad Atallah Mas`udi',
+            72 => 'I Made Gyanendra Anand Wisnawa',
+            73 => 'Nabilla Nafisatus Zuhro',
+            74 => 'Mahrinza Redouane Zakariyah',
+            75 => 'Aisha Hanifa',
+            76 => 'Muhammad Hugo Rayandra Esmid',
+            77 => 'Dwi Muslim',
+            78 => 'Najla Tufailah',
+            79 => 'Raffa Al Azmi',
+            80 => 'Adi Satrio',
+            81 => 'Anargya Shafa Setiyadi Putra',
+            82 => 'Fiorellin Ilona',
+            83 => 'D`qhaizhar Ari Dhiaulhaq',
+            84 => 'Muhammad Nadhif Pasya Ikhsan',
+            85 => 'Marvelino Davas',
+            86 => 'Muhammad Razzan Azizi Djauhari',
+            87 => 'Muhammad Rifki Pribadi',
+            88 => 'Alfarezy',
+            89 => 'Nathania Tiara Wahyudi',
+            90 => 'Pramudita Adi Putra',
+            91 => 'Sulthan Daffa Al Hasyimi',
+            92 => 'James Osamah',
+            93 => 'Donnavie Aulia',
+            94 => 'Hafiz Anugrah',
+            95 => 'Nur Rizki Syahbana',
+            96 => 'Suryapraba Laiasach',
+            97 => 'Muhammad Salman Rifki Haq',
+            98 => 'Jude Athala Yazid Sari',
+            99 => 'Saktyaveshavatar Dharmesthabuddhi',
+            100 => 'Muhammad Athasyah Enrizy',
+            101 => 'Putu Putra Sakti Sadhana',
+            102 => 'Achmad Rifqy Aqila',
+            103 => 'Wahyu Yoga Wicaksono',
+            104 => 'Khalifa Suryadinarta',
+            105 => 'Artika Satriyo',
+            106 => 'Bagus Harimurti',
+            107 => 'Prayudya Rizky Ramadhani',
+            108 => 'Iqlima Al Fairuz',
+            109 => 'Syarifah Nailatur Rohma',
+            110 => 'Bambang Nasarillah Kurniawan',
+            111 => 'Zid Ilmi',
+            112 => 'A. Algifari Rantiga Isdar',
+            113 => 'Muhammad Ridwan',
+            114 => 'Rahma Putri',
+            115 => 'Fairuza',
+            116 => 'Hanna Simanjuntak',
+            117 => 'Muhamad Nasrulhaq',
+            118 => 'Pradipta Airlangga Ramadhan',
+            119 => 'Raditya Putra Purbono',
+            120 => 'Patra Yudhistira Edwin',
+            121 => 'Alif Ramzy Pasha Firdaus',
+            122 => 'Anggun Eka Rizqy',
+            123 => 'Syahzanani Al Mustofa',
+            124 => 'Satria Tama',
+            125 => 'Sahya Aryaguna',
+            126 => 'Fadhilah Allayn',
+            127 => 'Razana Aulia',
+            128 => 'Atik Putri Matulina',
+            129 => 'Ridho Zhafif',
         ];
 
-        foreach ($namaMaba as $index => $nama) {
-            $nrp = '502725' . str_pad((string) ($index + 1), 4, '0', STR_PAD_LEFT);
+        $inactiveMabaNumbers = [10, 99, 52, 86, 109];
+
+        foreach ($namaMaba as $nomorUrut => $nama) {
+            $nrpSuffix = str_pad((string) $nomorUrut, 3, '0', STR_PAD_LEFT);
+            $nrp = '5027251' . $nrpSuffix;
 
             $mabas[] = Maba::create([
                 'nama' => $nama,
                 'nrp' => $nrp,
                 'password' => $nrp,
-                'status' => $index % 17 === 0 ? 'inactive' : 'active',
+                'status' => in_array($nomorUrut, $inactiveMabaNumbers, true) ? 'inactive' : 'active',
             ]);
         }
 
         /*
         |--------------------------------------------------------------------------
-        | 2. WARGA - 60 data
+        | 2. WARGA - 285 data
         |--------------------------------------------------------------------------
-        | Dibuat 60 warga agar 20 kelompok bisa punya 3 anggota unik.
-        | Karena di migration ada unique('warga_id') pada kelompok_warga_member,
-        | satu warga hanya boleh masuk ke satu kelompok.
+        | Total:
+        | - Angkatan 2023: 89 orang
+        | - Angkatan 2024: 123 orang
+        | - Angkatan 2022: 73 orang
+        |
+        | NRP menggunakan format 5027AA1BBB.
+        | AA  = dua digit angkatan, contoh 22, 23, 24.
+        | BBB = nomor urut warga pada angkatan tersebut.
         |--------------------------------------------------------------------------
         */
 
         $wargas = [];
 
-        $namaWarga = [
-            'Raka', 'Andi', 'Sinta', 'Bagas', 'Dimas',
-            'Naya', 'Tegar', 'Lala', 'Bima', 'Citra',
-            'Dion', 'Elsa', 'Farhan', 'Gita', 'Hendra',
-            'Indah', 'Jefri', 'Kirana', 'Lukman', 'Maya',
-            'Niko', 'Olivia', 'Panji', 'Qila', 'Reno',
-            'Salma', 'Tomi', 'Ulfa', 'Vito', 'Wulan',
-            'Yudha', 'Zahra', 'Adit', 'Bunga', 'Cahya',
-            'Devi', 'Erwin', 'Fitri', 'Galih', 'Hilda',
-            'Irvan', 'Jasmine', 'Kevin', 'Livia', 'Maulana',
-            'Nesya', 'Oki', 'Prita', 'Rafi', 'Salsa',
-            'Tasya', 'Udin', 'Vanya', 'Wira', 'Yuni',
-            'Zidan', 'Arga', 'Bianca', 'Chandra', 'Dewi',
+        $jumlahWargaPerAngkatan = [
+            2023 => 89,
+            2024 => 123,
+            2022 => 73,
         ];
 
-        foreach ($namaWarga as $index => $nama) {
-            $angkatan = match ($index % 3) {
-                0 => 2024,
-                1 => 2023,
-                default => 2022,
-            };
+        $namaWargaPerAngkatan = [
+            2023 => [
+                'Yusuf Wirawan Triyono',
+                'Hanifah Ayu Amalia',
+                'Nadira Lestari Nurfitriani',
+                'Salma Ningrum Umarani',
+                'Nadia Indriani Pertiwi',
+                'Annisa Kusumawati Dwiyanti',
+                'Bambang Fadillah Syahputra',
+                'Agus Erlangga Susanto',
+                'Delia Maharani Sari',
+                'Kresna Febrianto Syahbani',
+                'Nisa Hasanah Hapsari',
+                'Livia Fitriana Rahayu',
+                'Vanya Amalia Sukma',
+                'Rangga Wibowo Amin',
+                'Laras Zahira Puspitasari',
+                'Vina Lestari Wardani',
+                'Jasmine Sekar Maulida',
+                'Nisa Kirana Ariyanti',
+                'Maya Widyaningrum Kusumawardani',
+                'Agus Rahardian Ramdani',
+                'Sari Kartikasari Maharani',
+                'Salman Fauzan Wijaya',
+                'Farah Damayanti Syafira',
+                'Bella Melati Ningsih',
+                'Olivia Handayani Maulida',
+                'Citra Kirana Rachmawati',
+                'Ivan Prasetyo Pamungkas',
+                'Maya Amalia Hapsari',
+                'Ilham Wahyudi Adiputra',
+                'Fajar Herlambang Rabbani',
+                'Febri Hidayat Ramdani',
+                'Shafa Kurniasari Nuraini',
+                'Amira Hasanah Fadhilah',
+                'Rafi Kusuma Kurnia',
+                'Safira Puspita Nurhaliza',
+                'Reza Hidayat Maheswara',
+                'Bayu Pangestu Prabowo',
+                'Niko Nugroho Mustofa',
+                'Amira Puspita Wardani',
+                'Gilang Wibowo Anugrah',
+                'Sinta Hasanah Wahyuni',
+                'Ivan Fadillah Susanto',
+                'Citra Zahira Ramadhana',
+                'Ulfa Maharani Puspitasari',
+                'Wahyu Ardiansyah Nugroho',
+                'Arif Setiawan Akbar',
+                'Rachmat Pangestu Gunawan',
+                'Andi Baskara Zuhri',
+                'Salsa Kartikasari Salsabila',
+                'Laila Ayu Putri',
+                'Cahyo Pamungkas Wijaya',
+                'Aldo Jayadi Rahardian',
+                'Nadia Kartikasari Putri',
+                'Sari Kurniasari Lestari',
+                'Bianca Maulida Hapsari',
+                'Erlangga Syahputra Nasution',
+                'Amira Azzahra Ramadhana',
+                'Aisyah Ramadhani Suryani',
+                'Yuni Widyaningrum Maulida',
+                'Aqila Aulia Maharani',
+                'Febri Hakim Pangestu',
+                'Pranata Laksono Anugrah',
+                'Fania Yuliani Fadhilah',
+                'Rendi Pratama Anugrah',
+                'Lukman Utama Permana',
+                'Dion Mulyadi Adiputra',
+                'Sandy Lesmana Kusuma',
+                'Damar Hakim Utomo',
+                'Arif Maulana Rasyid',
+                'Dimas Ardhana Basuki',
+                'Taufik Pratama Syahbani',
+                'Citra Lestari Syafira',
+                'Putri Maulida Nugrahani',
+                'Raisa Juwita Dwiyanti',
+                'Kartika Kusumawati Sukma',
+                'Satria Darmawan Wiratama',
+                'Tegar Herlambang Prayoga',
+                'Tito Kurniawan Fauzi',
+                'Qonita Rahmawati Umarani',
+                'Fitri Cahyani Nurfitriani',
+                'Anwar Prakoso Cahyaputra',
+                'Dian Amanda Maharani',
+                'Firman Nurhadi Anugrah',
+                'Karin Aulia Wardani',
+                'Andi Fauzi Rabbani',
+                'Pranata Fauzi Darmawan',
+                'Rizal Hakim Prabowo',
+                'Nabila Wulandari Ningsih',
+                'Salsa Febriani Lestari',
+            ],
+            2024 => [
+                'Reno Permana Zuhri',
+                'Dian Ayu Kusumawardani',
+                'Luthfi Maulana Zuhri',
+                'Erlangga Rahardian Dewantara',
+                'Zalfa Arianti Maulida',
+                'Wulan Kusumawati Utami',
+                'Eko Fauzan Susanto',
+                'Yasmin Amanda Nuraini',
+                'Bayu Prawira Firmansyah',
+                'Naura Arianti Ariyanti',
+                'Aldo Azzam Lesmana',
+                'Niko Ramdani Syahbani',
+                'Qonita Oktaviani Hasanah',
+                'Elsa Fitriana Ningsih',
+                'Aldo Ardhana Amin',
+                'Malik Permana Maulana',
+                'Iqbal Lesmana Pratama',
+                'Riska Prameswari Maulida',
+                'Ari Cahyadi Prakoso',
+                'Qonita Yuliani Anggraini',
+                'Usman Kusuma Febriansyah',
+                'Yusuf Fauzan Kusuma',
+                'Syifa Rahmawati Wulandari',
+                'Icha Pertiwi Pangestika',
+                'Vito Utama Julianto',
+                'Tegar Baskara Prayoga',
+                'Prita Puspita Puspitasari',
+                'Salman Aditya Gustian',
+                'Farhan Utama Ramadhani',
+                'Hendra Ardiansyah Syahputra',
+                'Aqila Fitriana Wahyuni',
+                'Kresna Jatmiko Harimurti',
+                'Tito Wibowo Herlambang',
+                'Kevin Baskara Syahbani',
+                'Rendi Utama Adiputra',
+                'Karin Azzahra Salsabila',
+                'Andi Pangestu Permana',
+                'Indah Hasanah Nurhaliza',
+                'Anisa Wulandari Suryani',
+                'Sandy Pratama Rasyid',
+                'Rendi Jayadi Yulianto',
+                'Nanda Erlangga Effendi',
+                'Zahra Kartikasari Syafira',
+                'Yogi Setiawan Zuhri',
+                'Intan Widyaningrum Salsabila',
+                'Karin Kusumawati Kencana',
+                'Dinda Safitri Permatasari',
+                'Ayu Arianti Oktavia',
+                'Indah Permatasari Safitri',
+                'Bima Pamungkas Effendi',
+                'Vito Nugraha Yulianto',
+                'Hafiz Prasetyo Cahyono',
+                'Raisa Fitriana Fadhilah',
+                'Hendra Pradana Basuki',
+                'Ridho Utama Maheswara',
+                'Panji Wahyudi Zuhri',
+                'Laila Melati Safitri',
+                'Fajar Jatmiko Gunawan',
+                'Wulan Rahmawati Nurhaliza',
+                'Bianca Kirana Maulida',
+                'Luthfi Febrianto Wisesa',
+                'Vito Purnama Rabbani',
+                'Farhan Purnama Kurnia',
+                'Erlangga Wahyudi Susanto',
+                'Joko Saputra Yulianto',
+                'Usman Purnama Kusuma',
+                'Arif Pangestu Yudhistira',
+                'Zalfa Lestari Oktavia',
+                'Riska Hasanah Aprilia',
+                'Reza Mahardika Anugrah',
+                'Ratna Widyaningrum Wahyuni',
+                'Livia Melati Aprilia',
+                'Vina Utami Jayanti',
+                'Firman Nugroho Harimurti',
+                'Usman Kurniawan Prawira',
+                'Fathin Kusuma Yudhistira',
+                'Prita Permatasari Maharani',
+                'Yazid Kencana Rahman',
+                'Adit Setiawan Pamungkas',
+                'Dani Kencana Putra',
+                'Aulia Zahira Ariyanti',
+                'Laras Novitasari Putri',
+                'Cahyo Hidayat Maheswara',
+                'Syifa Febriani Dwiyanti',
+                'Yogi Hakim Permana',
+                'Haris Irawan Anugrah',
+                'Dimas Baskara Amin',
+                'Bella Kusumawati Nurfitriani',
+                'Zaskia Wulandari Rachmawati',
+                'Ayu Indriani Salsabila',
+                'Malik Erlangga Putra',
+                'Hanan Saputra Triyono',
+                'Dika Lesmana Kurnia',
+                'Delia Melati Mulyani',
+                'Naufal Saputra Cahyaputra',
+                'Zahra Safitri Nurhaliza',
+                'Vina Damayanti Indriani',
+                'Nisa Permatasari Nurhaliza',
+                'Elsa Ramadhani Syafira',
+                'Satria Wahyudi Adiputra',
+                'Bella Kusumawati Permatasari',
+                'Yuni Rahmawati Oktavia',
+                'Maya Sekar Aprilia',
+                'Rian Ramadhan Adiputra',
+                'Firman Febrianto Gunawan',
+                'Elvira Juwita Safitri',
+                'Dewi Damayanti Salsabila',
+                'Ulfa Arianti Puspitasari',
+                'Rachmat Permana Gumilang',
+                'Zidan Cahyadi Rahardian',
+                'Taufik Lesmana Fauzi',
+                'Kirana Puspita Rachmawati',
+                'Icha Cahyani Nurhaliza',
+                'Hanan Kencana Pratama',
+                'Fahri Wahyudi Cahyaputra',
+                'Sari Juwita Sukma',
+                'Eko Jayadi Kartono',
+                'Budi Wirawan Hidayat',
+                'Damar Nugroho Tanjung',
+                'Panji Kencana Hartanto',
+                'Satria Darmawan Ardiansyah',
+                'Prita Aulia Mulyani',
+                'Laras Amanda Widyastuti',
+            ],
+            2022 => [
+                'Raka Kencana Yudhistira',
+                'Naufal Nugroho Harimurti',
+                'Kirana Amalia Ramadhana',
+                'Tiara Hasanah Nurfitriani',
+                'Sinta Oktaviani Wulandari',
+                'Aurel Damayanti Suryani',
+                'Rizky Prawira Rahman',
+                'Yazid Nugraha Pamungkas',
+                'Panji Ramadhan Alamsyah',
+                'Syifa Novitasari Rahayu',
+                'Olivia Ayu Jayanti',
+                'Kresna Saputra Iskandar',
+                'Irvan Fauzan Firmansyah',
+                'Dion Kurniawan Gustian',
+                'Dedi Ardhana Febriansyah',
+                'Rangga Hidayat Gumilang',
+                'Nabila Handayani Azzahra',
+                'Anisa Febriani Virdhani',
+                'Eko Kurniawan Wijaya',
+                'Salsa Widyaningrum Pertiwi',
+                'Aulia Indriani Kencana',
+                'Dewi Febriani Utami',
+                'Yudha Febrianto Wicaksana',
+                'Hafiz Jayadi Jatmika',
+                'Rian Darmawan Fadillah',
+                'Rachmat Kurniawan Mahendra',
+                'Yoga Ananda Fauzi',
+                'Laila Febriani Hasanah',
+                'Nadira Prameswari Sukma',
+                'Luthfi Febrianto Prakoso',
+                'Gilang Prakoso Susanto',
+                'Livia Yuliani Kurniawati',
+                'Dani Hanif Adinata',
+                'Hanifah Fitriana Ningsih',
+                'Dika Irawan Wibowo',
+                'Chika Anggraini Widyastuti',
+                'Elvira Aulia Wahyuni',
+                'Elvira Arianti Virdhani',
+                'Joko Wijaya Akbar',
+                'Riska Arianti Ramadhana',
+                'Fitri Aulia Suryani',
+                'Indah Damayanti Mardhiyah',
+                'Salma Yuliani Hasanah',
+                'Aurel Fitriana Umarani',
+                'Dian Pertiwi Ariyanti',
+                'Gita Melati Kusumawardani',
+                'Delia Ramadhani Dwiyanti',
+                'Nadia Wulandari Hasanah',
+                'Salma Cahyani Nugrahani',
+                'Tasya Anggraini Oktavia',
+                'Reza Irawan Fauzi',
+                'Icha Yuliani Mulyani',
+                'Rizky Nurhadi Susanto',
+                'Ulfa Indriani Ramadhana',
+                'Elsa Utami Virdhani',
+                'Hendra Mahardika Putra',
+                'Hana Anggraini Umarani',
+                'Malik Wirawan Darmawan',
+                'Rizky Maulana Cahyaputra',
+                'Cahyo Nugraha Sutanto',
+                'Tegar Mulyadi Santoso',
+                'Anisa Hapsari Widyastuti',
+                'Olivia Ramadhani Safitri',
+                'Pranata Prakoso Hidayat',
+                'Rania Maulida Pangestika',
+                'Galang Hidayatullah Gunawan',
+                'Galang Febrianto Halim',
+                'Nadira Hapsari Indriani',
+                'Intan Azzahra Rahayu',
+                'Aldi Aditama Mahendra',
+                'Farhan Fauzan Fadhli',
+                'Aisyah Novitasari Nurfitriani',
+                'Bambang Hidayat Julianto',
+            ],
+        ];
 
-            $nrp = '5027' . substr((string) $angkatan, -2) . str_pad((string) ($index + 1), 4, '0', STR_PAD_LEFT);
+        $semuaNamaWarga = array_merge(...array_values($namaWargaPerAngkatan));
 
-            $wargas[] = Warga::create([
-                'nama' => $nama,
-                'nrp' => $nrp,
-                'angkatan' => $angkatan,
-                'password' => $nrp,
-                'status' => $index % 19 === 0 ? 'inactive' : 'active',
-            ]);
+        if (count($semuaNamaWarga) !== count(array_unique($semuaNamaWarga))) {
+            throw new \RuntimeException('Seeder warga gagal: terdapat nama warga yang duplikat.');
         }
 
+        foreach ($jumlahWargaPerAngkatan as $angkatan => $jumlahWarga) {
+            $namaWargaAngkatan = $namaWargaPerAngkatan[$angkatan] ?? [];
+
+            if (count($namaWargaAngkatan) !== $jumlahWarga) {
+                throw new \RuntimeException('Seeder warga gagal: jumlah nama warga angkatan ' . $angkatan . ' tidak sesuai.');
+            }
+
+            $angkatanSuffix = substr((string) $angkatan, -2);
+
+            for ($nomorUrut = 1; $nomorUrut <= $jumlahWarga; $nomorUrut++) {
+                $nrpSuffix = str_pad((string) $nomorUrut, 3, '0', STR_PAD_LEFT);
+                $nrp = '5027' . $angkatanSuffix . '1' . $nrpSuffix;
+
+                $wargas[] = Warga::create([
+                    'nama' => $namaWargaAngkatan[$nomorUrut - 1],
+                    'nrp' => $nrp,
+                    'angkatan' => $angkatan,
+                    'password' => $nrp,
+                    'status' => 'active',
+                ]);
+            }
+        }
         /*
         |--------------------------------------------------------------------------
         | 3. MIT WEEK - 20 data
@@ -468,49 +895,11 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | 10. PASSWORD RESET REQUEST - 20 data
-        |--------------------------------------------------------------------------
-        */
 
-        for ($i = 1; $i <= 20; $i++) {
-            $isMaba = $i % 2 === 1;
-
-            if ($isMaba) {
-                $requester = $mabas[($i - 1) % count($mabas)];
-                $requesterType = 'maba';
-                $requesterId = $requester->maba_id;
-            } else {
-                $requester = $wargas[($i - 1) % count($wargas)];
-                $requesterType = 'warga';
-                $requesterId = $requester->warga_id;
-            }
-
-            PasswordResetRequest::create([
-                'requester_type' => $requesterType,
-                'requester_id' => $requesterId,
-                'nrp' => $requester->nrp,
-                'new_password' => 'passwordbaru' . $i,
-                'status' => match ($i % 3) {
-                    0 => 'pending',
-                    1 => 'approved',
-                    default => 'rejected',
-                },
-                'admin_notes' => match ($i % 3) {
-                    0 => null,
-                    1 => 'Reset disetujui.',
-                    default => 'Data tidak sesuai.',
-                },
-                'requested_at' => now()->subDays($i),
-                'processed_at' => $i % 3 === 0 ? null : now()->subDays(max(0, $i - 1)),
-                'processed_by_admin_identifier' => $i % 3 === 0 ? null : 'admin-demo',
-            ]);
-        }
 
         /*
         |--------------------------------------------------------------------------
-        | 11. MONGO LOGS - masing-masing minimal 20 data
+        | 10. MONGO LOGS - masing-masing minimal 20 data
         |--------------------------------------------------------------------------
         | Jika MongoDB belum aktif, bagian ini akan dilewati agar seeding MySQL
         | tetap berhasil.

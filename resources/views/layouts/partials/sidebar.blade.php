@@ -2,7 +2,18 @@
     <div class="container-fluid">
         <h1 class="navbar-brand navbar-brand-autodark">
             <a href="#">
-                <span class="fw-bold">MIT System</span>
+                @php
+                    $dashboardUrl = match (session('mit_role')) {
+                        'admin' => route('admin.dashboard'),
+                        'warga' => route('warga.dashboard'),
+                        'maba' => route('maba.dashboard'),
+                        default => route('mit.login'),
+                    };
+                @endphp
+
+                <a href="{{ $dashboardUrl }}">
+                    <span class="fw-bold">MIT System</span>
+                </a>
             </a>
         </h1>
 

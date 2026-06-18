@@ -9,7 +9,9 @@
             <div class="card-body">
                 <div class="text-muted">Activity Logs</div>
                 <div class="fs-3 fw-bold">{{ $activityCount }}</div>
-                <a href="{{ route('admin.logs.activity') }}" class="btn btn-sm btn-dark mt-2">Lihat</a>
+                <a href="{{ route('admin.logs.activity') }}" class="btn btn-sm btn-dark mt-2">
+                    Lihat
+                </a>
             </div>
         </div>
     </div>
@@ -19,7 +21,9 @@
             <div class="card-body">
                 <div class="text-muted">Recommendation Logs</div>
                 <div class="fs-3 fw-bold">{{ $recommendationCount }}</div>
-                <a href="{{ route('admin.logs.recommendation') }}" class="btn btn-sm btn-dark mt-2">Lihat</a>
+                <a href="{{ route('admin.logs.recommendation') }}" class="btn btn-sm btn-dark mt-2">
+                    Lihat
+                </a>
             </div>
         </div>
     </div>
@@ -29,7 +33,9 @@
             <div class="card-body">
                 <div class="text-muted">Revision Histories</div>
                 <div class="fs-3 fw-bold">{{ $revisionCount }}</div>
-                <a href="{{ route('admin.logs.revision') }}" class="btn btn-sm btn-dark mt-2">Lihat</a>
+                <a href="{{ route('admin.logs.revision') }}" class="btn btn-sm btn-dark mt-2">
+                    Lihat
+                </a>
             </div>
         </div>
     </div>

@@ -82,8 +82,10 @@ class MabaBookingController extends Controller
 
         return view('maba.booking.my-bookings', [
             'bookings' => Booking::with(['group.representativeMember.warga', 'week', 'participants.maba', 'realisasi'])
+                ->whereIn('status', ['pending', 'accepted'])
                 ->whereHas('participants', function ($query) use ($maba) {
-                    $query->where('maba_id', $maba->maba_id);
+                    $query->where('maba_id', $maba->maba_id)
+                        ->where('status', 'joined');
                 })
                 ->latest()
                 ->paginate(10),

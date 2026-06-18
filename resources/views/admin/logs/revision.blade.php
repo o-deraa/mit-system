@@ -3,6 +3,99 @@
 @section('content')
 <h1 class="h3 mb-3">Revision Histories</h1>
 
+@php
+    if (! function_exists('mongo_normalize')) {
+        function mongo_normalize($value) {
+            if ($value === null || $value === '') {
+                return null;
+            }
+
+            if ($value instanceof \MongoDB\Model\BSONDocument || $value instanceof \MongoDB\Model\BSONArray) {
+                return mongo_normalize($value->getArrayCopy());
+            }
+
+            if ($value instanceof \MongoDB\BSON\ObjectId) {
+                return (string) $value;
+            }
+
+            if ($value instanceof \MongoDB\BSON\UTCDateTime) {
+                return $value
+                    ->toDateTime()
+                    ->setTimezone(new \DateTimeZone(config('app.timezone')))
+                    ->format('Y-m-d H:i:s');
+            }
+
+            if ($value instanceof \Carbon\CarbonInterface) {
+                return $value
+                    ->copy()
+                    ->setTimezone(config('app.timezone'))
+                    ->format('Y-m-d H:i:s');
+            }
+
+            if (is_array($value)) {
+                $result = [];
+
+                foreach ($value as $key => $item) {
+                    $result[$key] = mongo_normalize($item);
+                }
+
+                return $result;
+            }
+
+            if (is_object($value)) {
+                return mongo_normalize(json_decode(json_encode($value), true));
+            }
+
+            return $value;
+        }
+    }
+
+    if (! function_exists('mongo_json')) {
+        function mongo_json($value) {
+            $value = mongo_normalize($value);
+
+            if ($value === null || $value === [] || $value === '') {
+                return '-';
+            }
+
+            if (is_bool($value)) {
+                return $value ? 'true' : 'false';
+            }
+
+            if (is_scalar($value)) {
+                return (string) $value;
+            }
+
+            $json = json_encode(
+                $value,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+
+            return $json !== false ? $json : '-';
+        }
+    }
+@endphp
+
+<style>
+    .json-box {
+        max-height: 260px;
+        overflow: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: #f8f9fa;
+        color: #212529 !important;
+        opacity: 1 !important;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+
+    .table td {
+        vertical-align: top;
+    }
+</style>
+
 <div class="card">
     <div class="card-body table-responsive">
         <table class="table table-bordered table-striped align-middle">
@@ -19,28 +112,16 @@
             </thead>
             <tbody>
             @forelse($items as $item)
-                @php
-                    $changedFields = $item->getAttribute('changed_fields');
-
-                    if ($changedFields instanceof \MongoDB\Model\BSONDocument || $changedFields instanceof \MongoDB\Model\BSONArray) {
-                        $changedFields = $changedFields->getArrayCopy();
-                    }
-
-                    $changedFieldsJson = $changedFields
-                        ? json_encode($changedFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-                        : '-';
-                @endphp
-
                 <tr>
-                    <td>{{ $item->getAttribute('realisasi_id') ?? '-' }}</td>
-                    <td>{{ $item->getAttribute('admin_identifier') ?? '-' }}</td>
-                    <td>{{ $item->getAttribute('old_status') ?? '-' }}</td>
-                    <td>{{ $item->getAttribute('new_status') ?? '-' }}</td>
-                    <td>{{ $item->getAttribute('notes') ?? '-' }}</td>
+                    <td>{{ mongo_json($item->getAttribute('realisasi_id')) }}</td>
+                    <td>{{ mongo_json($item->getAttribute('admin_identifier')) }}</td>
+                    <td>{{ mongo_json($item->getAttribute('old_status')) }}</td>
+                    <td>{{ mongo_json($item->getAttribute('new_status')) }}</td>
+                    <td>{{ mongo_json($item->getAttribute('notes')) }}</td>
                     <td>
-                        <pre class="mb-0 small">{{ $changedFieldsJson }}</pre>
+                        <pre class="json-box">{{ mongo_json($item->getAttribute('changed_fields')) }}</pre>
                     </td>
-                    <td>{{ $item->getAttribute('created_at') ?? '-' }}</td>
+                    <td>{{ mongo_json($item->getAttribute('created_at')) }}</td>
                 </tr>
             @empty
                 <tr>

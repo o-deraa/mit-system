@@ -152,8 +152,21 @@ class BookingService
                 throw new RuntimeException('Maba hanya bisa join booking accepted.');
             }
 
-            if (MabaKelompokHistory::where('maba_id', $maba->maba_id)->where('kelompok_warga_id', $booking->kelompok_warga_id)->exists()) {
+            if (
+                MabaKelompokHistory::where('maba_id', $maba->maba_id)
+                    ->where('kelompok_warga_id', $booking->kelompok_warga_id)
+                    ->exists()
+            ) {
                 throw new RuntimeException('Maba sudah pernah bertemu kelompok warga ini.');
+            }
+
+            $existingParticipant = BookingParticipant::where('booking_id', $booking->booking_id)
+                ->where('maba_id', $maba->maba_id)
+                ->lockForUpdate()
+                ->first();
+
+            if ($existingParticipant && in_array($existingParticipant->status, ['joined', 'present'], true)) {
+                throw new RuntimeException('Maba sudah tergabung dalam booking ini.');
             }
 
             if ($this->bookingRepository->mabaHasActiveBookingSameGroup($maba->maba_id, $booking->kelompok_warga_id)) {
@@ -165,8 +178,28 @@ class BookingService
                 ->firstOrFail();
 
             $participantCount = $this->bookingRepository->activeParticipantCount($booking->booking_id);
+
             if ($participantCount >= $availability->session_mode) {
                 throw new RuntimeException('Booking sudah penuh.');
+            }
+
+            if ($existingParticipant && $existingParticipant->status === 'left') {
+                $existingParticipant->update([
+                    'status' => 'joined',
+                    'joined_at' => now(),
+                    'left_at' => null,
+                    'replaced_by_maba_id' => null,
+                ]);
+
+                $this->mongoLogService->activity($maba->maba_id, 'maba', 'rejoin_booking', 'Maba join kembali ke booking accepted.', [
+                    'booking_id' => $bookingId,
+                ]);
+
+                return $existingParticipant;
+            }
+
+            if ($existingParticipant) {
+                throw new RuntimeException('Status peserta tidak valid untuk join ulang.');
             }
 
             $participant = BookingParticipant::create([

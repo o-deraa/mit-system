@@ -13,6 +13,8 @@
 
     {{-- Custom CSS project --}}
     <link rel="stylesheet" href="{{ asset('css/mit-custom.css') }}">
+
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
 </head>
 
 <body>

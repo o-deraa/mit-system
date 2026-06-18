@@ -25,7 +25,10 @@ class MabaManagementController extends Controller
         }
 
         return view('admin.maba.index', [
-            'mabaList' => $query->orderBy('nama')->paginate(10)->withQueryString(),
+            'mabaList' => $query
+                ->orderBy('nrp', 'asc')
+                ->paginate(10)
+                ->withQueryString(),
             'q' => $request->input('q'),
         ]);
     }

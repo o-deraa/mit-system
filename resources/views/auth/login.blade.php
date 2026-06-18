@@ -4,8 +4,8 @@
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
         <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white">
-                <strong>Login MIT Management System</strong>
+            <div class="card-header bg-dark text-white d-flex justify-content-center align-items-center">
+                <strong>WELCOME TO MIT MANAGEMENT SYSTEM</strong>
             </div>
 
             <div class="card-body">

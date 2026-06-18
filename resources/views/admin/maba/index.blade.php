@@ -79,8 +79,10 @@
         </table>
     </div>
 
-    <div class="card-footer d-flex justify-content-end">
-        {{ $mabaList->links() }}
+    <div class="card-footer">
+        <div class="pagination-left">
+            {{ $mabaList->links() }}
+        </div>
     </div>
 </div>
 @endsection

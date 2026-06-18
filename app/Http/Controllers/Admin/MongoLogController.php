@@ -19,24 +19,24 @@ class MongoLogController extends Controller
         ]);
     }
 
-    public function activity(): View
-    {
-        return view('admin.logs.activity', [
-            'items' => ActivityLog::paginate(15),
-        ]);
-    }
+public function activity(): View
+{
+    return view('admin.logs.activity', [
+        'items' => ActivityLog::orderBy('created_at', 'desc')->paginate(15),
+    ]);
+}
 
-    public function recommendation(): View
-    {
-        return view('admin.logs.recommendation', [
-            'items' => RecommendationLog::paginate(15),
-        ]);
-    }
+public function recommendation(): View
+{
+    return view('admin.logs.recommendation', [
+        'items' => RecommendationLog::orderBy('created_at', 'desc')->paginate(15),
+    ]);
+}
 
-    public function revision(): View
-    {
-        return view('admin.logs.revision', [
-            'items' => RevisionHistory::paginate(15),
-        ]);
-    }
+public function revision(): View
+{
+    return view('admin.logs.revision', [
+        'items' => RevisionHistory::orderBy('created_at', 'desc')->paginate(15),
+    ]);
+}
 }

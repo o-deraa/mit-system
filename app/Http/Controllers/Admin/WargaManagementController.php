@@ -29,7 +29,11 @@ class WargaManagementController extends Controller
         }
 
         return view('admin.warga.index', [
-            'wargaList' => $query->orderBy('angkatan')->orderBy('nama')->paginate(10)->withQueryString(),
+            'wargaList' => $query
+                ->orderBy('angkatan', 'asc')
+                ->orderBy('nrp', 'asc')
+                ->paginate(10)
+                ->withQueryString(),
             'q' => $request->input('q'),
             'angkatan' => $request->input('angkatan'),
         ]);

@@ -73,11 +73,6 @@ class WebAuthService
             return false;
         }
 
-        /*
-        * Untuk data dummy lama, password bisa masih plaintext.
-        * Jangan langsung Hash::check(), karena Laravel bisa throw error
-        * jika storedPassword bukan hash Bcrypt/Argon yang valid.
-        */
         if (
             str_starts_with($storedPassword, '$2y$') ||
             str_starts_with($storedPassword, '$2a$') ||
@@ -88,10 +83,6 @@ class WebAuthService
             return Hash::check($plainPassword, $storedPassword);
         }
 
-        /*
-        * Fallback khusus demo:
-        * password plaintext di database dibandingkan langsung.
-        */
         return hash_equals($storedPassword, $plainPassword);
     }
 }

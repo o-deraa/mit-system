@@ -13,12 +13,12 @@
 
 ## Daftar Isi
 
-1. [Identitas Proyek](#1-identitas-proyek)
+1. [Identitas Proyek](#1-gambaran-umum-project)
 2. [Arsitektur Teknis](#2-arsitektur-teknis)
 3. [Desain Database](#3-desain-database)
 4. [Arsitektur Aplikasi & Struktur Folder](#4-arsitektur-aplikasi--struktur-folder)
-5. [Aturan Bisnis Utama](#5-aturan-bisnis-utama)
-6. [Alur Bisnis (Flow Diagrams)](#6-alur-bisnis-flow-diagrams)
+5. [Aturan Bisnis Utama](#5-aturan-utama-dalam-sistem)
+6. [Alur Bisnis (Flow Diagrams)](#6-flow-diagrams)
 7. [Routing & Endpoint](#7-routing--endpoint)
 8. [Mekanisme Keamanan](#8-mekanisme-keamanan)
 9. [Frontend & UI](#9-frontend--ui)
@@ -27,10 +27,10 @@
 
 ---
 
-## 1. Identitas Proyek
+## 1. Gambaran Umum Project
 
 ### 1.1 Deskripsi Sistem dan Permasalahan
-|
+
 Meet Information Technology atau MIT merupakan kegiatan pertemuan rutin antara mahasiswa baru Departemen Teknologi Informasi ITS dengan kakak tingkat atau warga untuk mengenal lingkungan departemen, membangun relasi, serta memahami budaya dan aturan yang berlaku. 
 
 Kelompok warga terdiri dari warga yang berasal dari beberapa angkatan, terutama angkatan 2022, 2023, dan 2024 (ada yang satu angkatan ada yang campur). Setelah pertemuan selesai, maba mendapatkan tanda tangan dari warga yang hadir sebagai bukti bahwa pertemuan telah dilakukan.
@@ -86,7 +86,7 @@ graph LR
 
 #### Warga
 
-> Warga adalah **mahasiswa senior** yang tergabung dalam kelompok warga.
+> Warga adalah **kakak tingkat** yang berasal dari angkatan 2022, 2023, dan 2024.
 
 | Kemampuan Warga |
 |-----------------|
@@ -101,7 +101,7 @@ graph LR
 
 #### Maba
 
-> Maba adalah **mahasiswa baru** yang perlu mengumpulkan tanda tangan dari warga.
+> Maba adalah **mahasiswa baru** angkatan 2025 yang perlu mengumpulkan tanda tangan dari warga.
 
 | Kemampuan Maba |
 |----------------|
@@ -130,14 +130,13 @@ graph LR
 | **Template Engine** | Blade | Bawaan Laravel |
 | **Styling** | Bootstrap | Sederhana, tanpa framework CSS lain |
 | **Custom CSS** | `public/css/mit-custom.css` | Penyesuaian tampilan tambahan |
-| **Database Relasional** | MySQL 8.x | Data transaksional utama |
-| **Database NoSQL** | MongoDB 5.x+ | Log dan audit trail |
+| **Database Relasional** | MySQL 8 | Data transaksional utama |
+| **Database NoSQL** | MongoDB 5 | Log dan audit trail |
 | **MongoDB Driver** | mongodb/laravel-mongodb ^5.7 | Integrasi MongoDB untuk Laravel |
-| **Build Tool** | Vite ^8.0 | Bawaan Laravel, opsional — bukan komponen utama UI |
 | **Local Environment** | Laragon | Windows |
 
 > [!IMPORTANT]
-> Sistem **tidak menggunakan** React, Vue, atau framework frontend SPA lainnya. Seluruh tampilan dibangun menggunakan **Blade + Bootstrap + custom CSS** agar tetap sederhana, eksplisit, dan mudah dipresentasikan.
+> Seluruh tampilan pada sistem  dibangun menggunakan **Blade + Bootstrap + custom CSS** agar tetap sederhana.
 
 ### 2.2 Pola Arsitektur: Service-Repository Pattern
 
@@ -173,6 +172,59 @@ graph TD
     MDL --> MONGO
 ```
 
+Berikut adalah ilustrasi lain dari pemisahan layer yang dilakukan sistem:
+
+```
+┌─────────────────────────────────────────────────────┐
+│                   HTTP REQUEST                       │
+└──────────────────────┬──────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│              LAYER 1: CONTROLLER (23 files)          │
+│                                                     │
+│  • Menerima request, validasi input form             │
+│  • Memanggil service untuk business logic            │
+│  • Boleh query READ ringan untuk view                │
+│  • Return Blade view + data                          │
+│                                                     │
+│  Admin/ (10)  │  Maba/ (7)  │  Warga/ (5)  │ Auth (1) │
+└──────────────────────┬──────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│              LAYER 2: SERVICE (14 files)              │
+│                                                     │
+│  • Business logic utama                              │
+│  • Validasi aturan bisnis                            │
+│  • DB::transaction() untuk atomicity                 │
+│  • lockForUpdate() untuk concurrency                 │
+│  • Semua operasi WRITE (create/update/delete)        │
+│                                                     │
+│  BookingService  │  RealisasiService  │  dll.        │
+└──────────────────────┬──────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│           LAYER 3: REPOSITORY (1 file)               │
+│                                                     │
+│  • Query kecil yang reusable                         │
+│  • Dipanggil oleh banyak service                     │
+│  • BookingRepository: 4 method                       │
+└──────────────────────┬──────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│         LAYER 4: MODEL + DATABASE (15 models)        │
+│                                                     │
+│  • Eloquent ORM → MySQL (11 model)                   │
+│  • MongoDB\Eloquent → MongoDB (4 model)              │
+│  • Relationship definitions (hasMany, belongsTo)     │
+│  • Casts (boolean, date)                             │
+│                                                     │
+│  ┌──────────┐    ┌──────────┐                        │
+│  │ MySQL 8  │    │ MongoDB 5│                        │
+│  │ 11 tabel │    │ 4 koleksi│                        │
+│  └──────────┘    └──────────┘                        │
+└─────────────────────────────────────────────────────┘
+```
+
 ### 2.3 Polyglot Persistence (Dual Database)
 
 Sistem menggunakan dua jenis database, yakni:
@@ -188,174 +240,8 @@ Sistem menggunakan dua jenis database, yakni:
 
 ### 3.1 Entity Relationship Diagram (ERD)
 
-> [!NOTE]
-> Relasi `WARGA ||--o| KELOMPOK_WARGA_MEMBER` dibatasi oleh `UNIQUE(warga_id)`, sehingga secara database satu warga hanya dapat menjadi anggota satu kelompok. Satu kelompok dapat memiliki 2 sampai 4 anggota warga.
 
-```mermaid
-erDiagram
-    MABA {
-        bigint maba_id PK
-        varchar nama
-        varchar nrp UK
-        varchar password
-        enum status "active / inactive"
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    WARGA {
-        bigint warga_id PK
-        varchar nama
-        varchar nrp UK
-        year angkatan
-        varchar password
-        enum status "active / inactive"
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    MIT_WEEK {
-        bigint week_id PK
-        int week_number UK
-        date start_date
-        date end_date
-        enum status "upcoming / active / completed"
-        enum availability_input_status "open / closed"
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    KELOMPOK_WARGA {
-        bigint kelompok_warga_id PK
-        int kode_kelompok UK
-        text rules
-        enum status "draft / final"
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    KELOMPOK_WARGA_MEMBER {
-        bigint member_id PK
-        bigint kelompok_warga_id FK
-        bigint warga_id FK "UNIQUE - 1 warga 1 kelompok"
-        boolean is_perwakilan
-        varchar nomor_wa
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    WEEKLY_AVAILABILITY {
-        bigint availability_id PK
-        bigint week_id FK
-        bigint kelompok_warga_id FK
-        boolean is_available
-        tinyint session_mode "hanya 4 atau 6"
-        tinyint session_count "maks 3 atau 2"
-        text notes
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    BOOKING {
-        bigint booking_id PK
-        bigint week_id FK
-        bigint kelompok_warga_id FK
-        bigint created_by_maba_id FK
-        enum status "pending / accepted / cancelled / completed"
-        datetime final_schedule
-        varchar final_location
-        text cancelled_reason
-        text warga_notes
-        bigint decided_by_warga_id FK
-        timestamp decided_at
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    BOOKING_PARTICIPANT {
-        bigint booking_participant_id PK
-        bigint booking_id FK
-        bigint maba_id FK
-        enum status "joined / left / present / absent / replaced"
-        bigint replaced_by_maba_id FK
-        timestamp joined_at
-        timestamp left_at
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    REALISASI {
-        bigint realisasi_id PK
-        bigint booking_id FK "UNIQUE - 1 booking 1 realisasi"
-        bigint week_id FK
-        bigint submitted_by_maba_id FK
-        boolean realisasi_is_meeting_held
-        boolean is_warga_as_planned
-        text absent_warga_notes
-        text additional_warga_notes
-        text general_notes
-        enum status "pending / verified / revision / rejected"
-        timestamp submitted_at
-        timestamp verified_at
-        varchar verified_by_admin_identifier
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    VERIFICATION_RESULT {
-        bigint verification_id PK
-        bigint realisasi_id FK
-        bigint maba_id FK
-        bigint week_id FK
-        int claimed_ttd_2022
-        int claimed_ttd_2023
-        int claimed_ttd_2024
-        int verified_ttd_2022
-        int verified_ttd_2023
-        int verified_ttd_2024
-        enum status "pending / verified / revision / rejected"
-        text admin_comment
-        varchar verified_by_admin_identifier
-        timestamp verified_at
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    MABA_KELOMPOK_HISTORY {
-        bigint history_id PK
-        bigint maba_id FK
-        bigint kelompok_warga_id FK
-        bigint week_id FK
-        bigint booking_id FK
-        timestamp created_at
-    }
-    
-    MABA ||--o{ BOOKING : "membuat"
-    MABA ||--o{ BOOKING_PARTICIPANT : "menjadi peserta"
-    MABA ||--o{ MABA_KELOMPOK_HISTORY : "memiliki riwayat"
-    MABA ||--o{ REALISASI : "mengajukan"
-    MABA ||--o{ VERIFICATION_RESULT : "diverifikasi"
-    
-    WARGA ||--o| KELOMPOK_WARGA_MEMBER : "menjadi anggota"
-    WARGA ||--o{ BOOKING : "memutuskan"
-    
-    KELOMPOK_WARGA ||--o{ KELOMPOK_WARGA_MEMBER : "memiliki anggota"
-    KELOMPOK_WARGA ||--o{ WEEKLY_AVAILABILITY : "mengatur ketersediaan"
-    KELOMPOK_WARGA ||--o{ BOOKING : "menerima booking"
-    KELOMPOK_WARGA ||--o{ MABA_KELOMPOK_HISTORY : "dikunjungi oleh"
-    
-    MIT_WEEK ||--o{ WEEKLY_AVAILABILITY : "memiliki availability"
-    MIT_WEEK ||--o{ BOOKING : "dijadwalkan pada"
-    MIT_WEEK ||--o{ REALISASI : "dilaporkan pada"
-    MIT_WEEK ||--o{ VERIFICATION_RESULT : "diverifikasi pada"
-    MIT_WEEK ||--o{ MABA_KELOMPOK_HISTORY : "tercatat pada"
-    
-    BOOKING ||--o{ BOOKING_PARTICIPANT : "memiliki peserta"
-    BOOKING ||--o| REALISASI : "memiliki realisasi"
-    BOOKING ||--o{ MABA_KELOMPOK_HISTORY : "menghasilkan riwayat"
-    
-    REALISASI ||--o{ VERIFICATION_RESULT : "memiliki hasil verifikasi"
-```
+![alt text](<public/images/erd.png>)
 
 ### 3.2 Daftar Tabel MySQL (11 Tabel)
 
@@ -430,7 +316,7 @@ Menyimpan data kelompok warga secara umum.
 | `updated_at` | TIMESTAMP | — | Waktu pembaruan terakhir |
 
 > [!NOTE]
-> Tabel `kelompok_warga` **tidak** menyimpan kolom perwakilan. Perwakilan ditentukan dari tabel `kelompok_warga_member` berdasarkan kolom `is_perwakilan = true`.
+> Tabel `kelompok_warga` tidak menyimpan kolom perwakilan. Perwakilan ditentukan dari tabel `kelompok_warga_member` berdasarkan kolom `is_perwakilan = true`.
 
 ---
 
@@ -521,10 +407,6 @@ Tabel utama pencatatan booking pertemuan.
 
 **Index:** `INDEX(week_id, kelompok_warga_id, status)`
 
-
-> [!NOTE]
-> **Tidak ada status `rejected`** pada booking. Status yang valid hanya: `pending`, `accepted`, `cancelled`, `completed`
-
 ---
 
 #### 3.2.8 Tabel `booking_participant`
@@ -547,7 +429,7 @@ Menyimpan peserta dari setiap booking.
 
 > [!NOTE]
 > **Aturan penting peserta booking:**
-> - Jika maba keluar dari booking → status diubah ke `left`, **data tidak boleh dihapus**
+> - Jika maba keluar dari booking → status diubah ke `left`, **data tidak  dihapus**
 > - Jika maba bergabung ulang ke booking yang sama → **update baris lama** dari `left` ke `joined`, **bukan insert baris baru**
 > - Halaman "Booking Saya" **hanya menampilkan** peserta berstatus `joined` dan `present`
 > - Peserta berstatus `left`, `absent`, `replaced` **tidak ditampilkan** di "Booking Saya"
@@ -646,7 +528,7 @@ MongoDB digunakan untuk data yang bersifat:
 4. Cocok untuk kebutuhan audit trail.
 5. Lebih sering dibaca sebagai riwayat daripada diubah.
 
-Dengan demikian, MongoDB tidak menggantikan MySQL, melainkan melengkapi MySQL untuk kebutuhan pencatatan aktivitas dan riwayat sistem.
+Dengan demikian, MongoDB melengkapi MySQL untuk kebutuhan pencatatan aktivitas dan riwayat sistem.
 
 ---
 
@@ -1012,7 +894,6 @@ Desain ini memungkinkan MySQL dan MongoDB memiliki tanggung jawab yang berbeda d
 ```
 mit-system/
 ├── app/
-│   ├── Console/Commands/           # Artisan CLI commands
 │   ├── Http/
 │   │   ├── Controllers/
 │   │   │   ├── Admin/              # Controllers admin (dashboard, CRUD, monitoring, verifikasi, logs)
@@ -1194,7 +1075,7 @@ Sistem menggunakan **algoritma scoring** untuk merekomendasikan 5 kelompok warga
 
 ---
 
-## 6. Alur Bisnis (Flow Diagrams)
+## 6. Flow Diagrams
 
 ### 6.1 Alur Booking Pertemuan
 

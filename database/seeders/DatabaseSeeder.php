@@ -925,15 +925,6 @@ class DatabaseSeeder extends Seeder
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | 10. MONGO LOGS - masing-masing minimal 20 data
-        |--------------------------------------------------------------------------
-        | Jika MongoDB belum aktif, bagian ini akan dilewati agar seeding MySQL
-        | tetap berhasil.
-        |--------------------------------------------------------------------------
-        */
-
         try {
             ActivityLog::query()->delete();
             UploadBuktiLog::query()->delete();
